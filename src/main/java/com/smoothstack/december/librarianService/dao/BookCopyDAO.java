@@ -11,9 +11,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.BookCopy;
 
+@Component
 public class BookCopyDAO extends BaseDAO<BookCopy> implements ResultSetExtractor<List<BookCopy>> {
     
     public Map<String, Object> createBookCopy(int bookId, int branchId, int amount) throws ClassNotFoundException, SQLException {

@@ -10,9 +10,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.Borrower;
 
+@Component
 public class BorrowerDAO extends BaseDAO<Borrower> implements ResultSetExtractor<List<Borrower>> {
 
     public Integer createBorrower(String name, String address, String phone) throws ClassNotFoundException, SQLException {

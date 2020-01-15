@@ -1,11 +1,12 @@
 package com.smoothstack.december.librarianService.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.smoothstack.december.librarianService.dao.BookCopyDAO;
 import com.smoothstack.december.librarianService.dao.BookDAO;
@@ -14,6 +15,7 @@ import com.smoothstack.december.librarianService.entity.Book;
 import com.smoothstack.december.librarianService.entity.BookCopy;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 
+@Service
 public class LibrarianService {
     
     @Autowired
@@ -24,55 +26,32 @@ public class LibrarianService {
     
     @Autowired
     private LibraryBranchDAO libraryBranchDAO;
-    
-    public String updateBookCopy(int bookId, int branchId, int amount) {
-        try {
+
+    @Transactional
+    public void updateBookCopy(int bookId, int branchId, int amount) throws SQLException, ClassNotFoundException{
             this.bookCopyDAO.updateBookCopy(bookId, branchId, amount);
-            return "successfully updated.";
-        } catch(SQLException | ClassNotFoundException e) {
-            return "failed to update.";
-        }
     }
     
-    public Map<String, Object> addBookCopy(int bookId, int branchId, int amount) {
-        try {
+    @Transactional
+    public Map<String, Object> addBookCopy(int bookId, int branchId, int amount) throws SQLException, ClassNotFoundException {
             return this.bookCopyDAO.createBookCopy(bookId, branchId, amount);
-        } catch(SQLException | ClassNotFoundException e) {
-            return null;
-        }
     }
     
-    public String updateLibraryBranch(int branchId, String branchName, String branchAddress) {
-        try {
+    @Transactional
+    public void updateLibraryBranch(int branchId, String branchName, String branchAddress) throws SQLException, ClassNotFoundException {
             this.libraryBranchDAO.updateBranch(branchId, branchName, branchAddress);
-            return "successfully updated.";
-        } catch(SQLException | ClassNotFoundException e) {
-            return "failed to update.";
-        }
     }
     
-    public List<Book> getBooks() {
-        try {
+    public List<Book> getBooks() throws SQLException, ClassNotFoundException {
             return this.bookDAO.getBooks();
-        } catch(SQLException | ClassNotFoundException e) {
-            return new ArrayList<Book>();
-        }
     }
     
-    public List<LibraryBranch> getLibraryBranches() {
-        try {
+    public List<LibraryBranch> getLibraryBranches() throws SQLException, ClassNotFoundException {
             return this.libraryBranchDAO.getBranchs();
-        } catch(SQLException | ClassNotFoundException e) {
-            return new ArrayList<LibraryBranch>();
-        }
     }
     
-    public List<BookCopy> getBookCopies(int branchId) {
-        try {
+    public List<BookCopy> getBookCopies(int branchId) throws SQLException, ClassNotFoundException {
             return this.bookCopyDAO.getBookCopys(branchId);
-        } catch(SQLException | ClassNotFoundException e) {
-            return new ArrayList<BookCopy>();
-        }
     }
     
 }

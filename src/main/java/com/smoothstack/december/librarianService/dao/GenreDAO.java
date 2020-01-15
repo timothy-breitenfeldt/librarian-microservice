@@ -10,9 +10,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.Genre;
 
+@Component
 public class GenreDAO extends BaseDAO<Genre> implements ResultSetExtractor<List<Genre>> {
 
     public Integer createGenre(String genreName) throws ClassNotFoundException, SQLException {

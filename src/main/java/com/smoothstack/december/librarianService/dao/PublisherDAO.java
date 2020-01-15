@@ -10,9 +10,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.Publisher;
 
+@Component
 public class PublisherDAO extends BaseDAO<Publisher> implements ResultSetExtractor<List<Publisher>> {
     
     public Integer createPublisher(String publisherName, String publisherAddress, String publisherPhone) throws ClassNotFoundException, SQLException {

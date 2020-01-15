@@ -13,9 +13,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.BookLoan;
 
+@Component
 public class BookLoanDAO extends BaseDAO<BookLoan> implements ResultSetExtractor<List<BookLoan>> {
     
     public Map<String, Object> checkoutBook(int bookId, int branchId, int cardNumber) throws ClassNotFoundException, SQLException {

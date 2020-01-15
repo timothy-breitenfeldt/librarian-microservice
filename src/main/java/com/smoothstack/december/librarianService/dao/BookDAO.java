@@ -11,9 +11,11 @@ import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import com.smoothstack.december.librarianService.entity.Book;
 
+@Component
 public class BookDAO extends BaseDAO<Book> implements ResultSetExtractor<List<Book>> {
     
     public Integer createBook(String title, int publisherId) throws ClassNotFoundException, SQLException {
