@@ -1,35 +1,84 @@
 package com.smoothstack.december.librarianService.entity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tbl_author")
 public class Author {
-    
-    private int authorId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "authorId")
+    private Long authorId;
+
+    @Column(name = "authorName")
     private String name;
-    private List<Book> books;
-    
-    public int getAuthorId() {
-        return authorId;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tbl_book_authors", joinColumns = { @JoinColumn(name = "authorId") }, inverseJoinColumns = {
+            @JoinColumn(name = "bookId") })
+    private Set<Book> books = new HashSet<>();
+
+    public Long getAuthorId() {
+        return this.authorId;
     }
 
-    public void setAuthorId(int authorId) {
+    public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public Set<Book> getBooks() {
+        return this.books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
+    }
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        this.books.remove(book);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.authorId, this.name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Author)) {
+            return false;
+        }
+        Author other = (Author) obj;
+        return Objects.equals(this.authorId, other.authorId) && Objects.equals(this.name, other.name);
     }
 
 }
