@@ -1,6 +1,8 @@
 package com.smoothstack.december.librarianService.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
@@ -12,18 +14,19 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;;
 
 @Entity
 @Table(name = "tbl_book_loans")
-@AssociationOverrides({ @AssociationOverride(name = "bookCopyId.book", joinColumns = @JoinColumn(name = "bookId")),
-        @AssociationOverride(name = "primaryKey.branch", joinColumns = @JoinColumn(name = "branchId")) })
-public class BookLoan {
+@AssociationOverrides({ @AssociationOverride(name = "bookLoanId.book", joinColumns = @JoinColumn(name = "bookId")),
+        @AssociationOverride(name = "bookLoanId.branch", joinColumns = @JoinColumn(name = "branchId")),
+        @AssociationOverride(name = "bookLoanId.borrower", joinColumns = @JoinColumn(name = "cardNo")) })
+public class BookLoan implements Serializable {
 
     @Embeddable
-    private class BookLoanId {
+    private class BookLoanId implements Serializable {
+
+        private static final long serialVersionUID = -8848058513226751763L;
 
         @ManyToOne(cascade = CascadeType.ALL)
         private Book book;
@@ -58,21 +61,49 @@ public class BookLoan {
             this.borrower = borrower;
         }
 
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + this.getEnclosingInstance().hashCode();
+            result = prime * result + Objects.hash(this.book, this.borrower, this.branch);
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof BookLoanId)) {
+                return false;
+            }
+            BookLoanId other = (BookLoanId) obj;
+            if (!this.getEnclosingInstance().equals(other.getEnclosingInstance())) {
+                return false;
+            }
+            return Objects.equals(this.book, other.book) && Objects.equals(this.borrower, other.borrower)
+                    && Objects.equals(this.branch, other.branch);
+        }
+
+        private BookLoan getEnclosingInstance() {
+            return BookLoan.this;
+        }
+
     }
+
+    private static final long serialVersionUID = 6976480817248770465L;
 
     @EmbeddedId
     private BookLoanId bookLoanId = new BookLoanId();
 
     @Column(name = "dateOut")
-    @Temporal(TemporalType.DATE)
     private LocalDate dateOut;
 
     @Column(name = "dueDate")
-    @Temporal(TemporalType.DATE)
     private LocalDate dueDate;
 
     @Column(name = "dateIn")
-    @Temporal(TemporalType.DATE)
     private LocalDate dateIn;
 
     public LocalDate getDateOut() {
@@ -124,6 +155,24 @@ public class BookLoan {
 
     public void setBorrower(Borrower borrower) {
         this.bookLoanId.setBorrower(borrower);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.bookLoanId, this.dateIn, this.dateOut, this.dueDate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof BookLoan)) {
+            return false;
+        }
+        BookLoan other = (BookLoan) obj;
+        return Objects.equals(this.bookLoanId, other.bookLoanId) && Objects.equals(this.dateIn, other.dateIn)
+                && Objects.equals(this.dateOut, other.dateOut) && Objects.equals(this.dueDate, other.dueDate);
     }
 
 }

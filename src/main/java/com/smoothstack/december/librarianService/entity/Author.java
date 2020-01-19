@@ -1,5 +1,6 @@
 package com.smoothstack.december.librarianService.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,7 +18,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tbl_author")
-public class Author {
+public class Author implements Serializable {
+
+    private static final long serialVersionUID = -8210028480680699468L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

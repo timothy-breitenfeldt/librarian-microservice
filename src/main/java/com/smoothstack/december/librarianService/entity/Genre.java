@@ -1,5 +1,7 @@
 package com.smoothstack.december.librarianService.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,8 +17,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tabl_genre")
-public class Genre {
+@Table(name = "tbl_genre")
+public class Genre implements Serializable {
+
+    private static final long serialVersionUID = -7871622461454589536L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,7 @@ public class Genre {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_book_genres", joinColumns = { @JoinColumn(name = "genreId") }, inverseJoinColumns = {
             @JoinColumn(name = "bookId") })
-    private Set<Book> books;
+    private Set<Book> books = new HashSet<>();
 
     public Long getGenreId() {
         return this.genreId;
