@@ -14,8 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
-@Table(name = "tbl=publisher")
+@Table(name = "tbl_publisher")
 public class Publisher implements Serializable {
 
     private static final long serialVersionUID = 7377441833253328339L;
@@ -35,6 +37,7 @@ public class Publisher implements Serializable {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Book> books = new HashSet<>();
 
     public Long getPublisherId() {

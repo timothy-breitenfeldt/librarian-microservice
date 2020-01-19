@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tbl_borrower")
 public class Borrower implements Serializable {
@@ -35,6 +37,7 @@ public class Borrower implements Serializable {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "bookLoanId.borrower", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<BookLoan> bookLoans = new HashSet<>();
 
     public Long getCardNumber() {

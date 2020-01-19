@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tbl_library_branch")
 public class LibraryBranch implements Serializable {
@@ -32,9 +34,11 @@ public class LibraryBranch implements Serializable {
     private String address;
 
     @OneToMany(mappedBy = "bookCopyId.branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<BookCopy> bookCopies = new HashSet<>();
 
     @OneToMany(mappedBy = "bookLoanId.branch", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<BookLoan> bookLoans = new HashSet<>();
 
     public Long getBranchId() {

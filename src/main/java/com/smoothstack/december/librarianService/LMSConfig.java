@@ -8,8 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableTransactionManagement
 public class LMSConfig {
 
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -28,12 +30,13 @@ public class LMSConfig {
     }
 
     @Bean
-    @Qualifier(value="mySQLTemplate")
+    @Qualifier(value = "mySQLTemplate")
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(this.dataSource());
     }
 
     @Bean
+    @Qualifier(value = "transactionManager")
     public DataSourceTransactionManager dataSourceTransactionManager() {
         return new DataSourceTransactionManager(this.dataSource());
     }

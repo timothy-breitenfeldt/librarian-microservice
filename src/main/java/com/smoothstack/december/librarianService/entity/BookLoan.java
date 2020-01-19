@@ -14,7 +14,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;;
 
 @Entity
 @Table(name = "tbl_book_loans")
@@ -29,12 +31,15 @@ public class BookLoan implements Serializable {
         private static final long serialVersionUID = -8848058513226751763L;
 
         @ManyToOne(cascade = CascadeType.ALL)
+        @JsonBackReference
         private Book book;
 
         @ManyToOne(cascade = CascadeType.ALL)
+        @JsonBackReference
         private LibraryBranch branch;
 
         @ManyToOne(cascade = CascadeType.ALL)
+        @JsonBackReference
         private Borrower borrower;
 
         public Book getBook() {

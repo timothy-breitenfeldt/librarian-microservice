@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "tbl_genre")
@@ -30,9 +33,10 @@ public class Genre implements Serializable {
     @Column(name = "genreName")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_book_genres", joinColumns = { @JoinColumn(name = "genreId") }, inverseJoinColumns = {
             @JoinColumn(name = "bookId") })
+    @JsonBackReference
     private Set<Book> books = new HashSet<>();
 
     public Long getGenreId() {

@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "tbl_book_copies")
 @AssociationOverrides({ @AssociationOverride(name = "bookCopyId.book", joinColumns = @JoinColumn(name = "bookId")),
@@ -27,9 +29,11 @@ public class BookCopy implements Serializable {
         private static final long serialVersionUID = 22619397635869180L;
 
         @ManyToOne(cascade = CascadeType.ALL)
+        @JsonBackReference
         private Book book;
 
         @ManyToOne(cascade = CascadeType.ALL)
+        @JsonBackReference
         private LibraryBranch branch;
 
         public Book getBook() {

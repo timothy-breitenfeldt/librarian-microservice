@@ -16,8 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "tbl_book")
@@ -35,23 +37,20 @@ public class Book implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pubId")
+    @JsonBackReference
     private Publisher publisher;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_book_authors", joinColumns = { @JoinColumn(name = "bookId") }, inverseJoinColumns = {
             @JoinColumn(name = "authorId") })
+    @JsonManagedReference
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_book_genres", joinColumns = { @JoinColumn(name = "bookId") }, inverseJoinColumns = {
             @JoinColumn(name = "genreId") })
+    @JsonManagedReference
     private Set<Genre> genres = new HashSet<>();
-
-    @OneToMany(mappedBy = "bookCopyId.book", cascade = CascadeType.ALL)
-    private Set<BookCopy> bookCopies = new HashSet<>();
-
-    @OneToMany(mappedBy = "bookLoanId.book", cascade = CascadeType.ALL)
-    Set<BookLoan> bookLoans = new HashSet<BookLoan>();
 
     public Long getBookId() {
         return this.bookId;
@@ -93,14 +92,6 @@ public class Book implements Serializable {
         this.genres = genres;
     }
 
-    public Set<BookCopy> getBookCopies() {
-        return this.bookCopies;
-    }
-
-    public void setBookCopies(Set<BookCopy> bookCopies) {
-        this.bookCopies = bookCopies;
-    }
-
     public void addAuthor(Author author) {
         this.authors.add(author);
     }
@@ -115,22 +106,6 @@ public class Book implements Serializable {
 
     public void removeGenre(Genre genre) {
         this.genres.remove(genre);
-    }
-
-    public void addBookCopy(BookCopy bookCopy) {
-        this.bookCopies.add(bookCopy);
-    }
-
-    public void removeBookCopy(BookCopy bookCopy) {
-        this.bookCopies.remove(bookCopy);
-    }
-
-    public void addBookLoan(BookLoan bookLoan) {
-        this.bookLoans.add(bookLoan);
-    }
-
-    public void removeBookLoan(BookLoan bookLoan) {
-        this.bookLoans.remove(bookLoan);
     }
 
     @Override
