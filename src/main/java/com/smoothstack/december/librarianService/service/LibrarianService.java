@@ -1,9 +1,7 @@
 package com.smoothstack.december.librarianService.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +11,6 @@ import com.smoothstack.december.librarianService.dao.BookDAO;
 import com.smoothstack.december.librarianService.dao.LibraryBranchDAO;
 import com.smoothstack.december.librarianService.entity.Book;
 import com.smoothstack.december.librarianService.entity.BookCopy;
-import com.smoothstack.december.librarianService.entity.BookCopy.BookCopyId;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 
 @Service
@@ -52,16 +49,7 @@ public class LibrarianService {
     }
 
     public List<BookCopy> getBookCopies(Long branchId) {
-        List<BookCopyId> ids = new ArrayList<>();
-        LibraryBranch branch = new LibraryBranch();
-        BookCopyId bookCopyId = new BookCopyId();
-        branch.setBranchId(branchId);
-        bookCopyId.setBranch(branch);
-        bookCopyId.setBook(book);
-        BookCopy bookCopy = new BookCopy();
-        bookCopy.setBookCopyId(bookCopyId);
-        ids.add(bookCopyId);
-        return this.bookCopyDAO.findAllById(Example.create(bookCopy));
+        return this.bookCopyDAO.findBookCopiesById(branchId);
     }
 
 }
