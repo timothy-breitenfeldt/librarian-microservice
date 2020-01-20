@@ -1,52 +1,35 @@
 package com.smoothstack.december.librarianService.entity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
-@Table(name = "tbl_borrower")
-public class Borrower implements Serializable {
-
-    private static final long serialVersionUID = 7597280421701706332L;
+@Table
+public class Borrower {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cardNo")
-    private Long cardNumber;
+    private Long id;
 
-    @Column(name = "name")
+    @Column
     private String name;
 
-    @Column(name = "address")
+    @Column
     private String address;
 
-    @Column(name = "phone")
+    @Column
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "bookLoanId.borrower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private Set<BookLoan> bookLoans = new HashSet<>();
-
-    public Long getCardNumber() {
-        return this.cardNumber;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setCardNumber(Long cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -71,32 +54,6 @@ public class Borrower implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void addBookLoan(BookLoan bookLoan) {
-        this.bookLoans.add(bookLoan);
-    }
-
-    public void removeBookLoan(BookLoan bookLoan) {
-        this.bookLoans.remove(bookLoan);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.address, this.cardNumber, this.name, this.phoneNumber);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Borrower)) {
-            return false;
-        }
-        Borrower other = (Borrower) obj;
-        return Objects.equals(this.address, other.address) && Objects.equals(this.cardNumber, other.cardNumber)
-                && Objects.equals(this.name, other.name) && Objects.equals(this.phoneNumber, other.phoneNumber);
     }
 
 }

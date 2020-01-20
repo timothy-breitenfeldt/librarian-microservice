@@ -13,7 +13,7 @@ import com.smoothstack.december.librarianService.entity.BookCopy.BookCopyId;
 @Repository
 public interface BookCopyDAO extends JpaRepository<BookCopy, BookCopyId> {
 
-    @Query("FROM BookCopy BC WHERE BC.bookCopyId.branch.branchId = :branchId")
+    @Query("FROM BookCopy bc WHERE bc.id.branchId = :branchId")
     public List<BookCopy> findBookCopiesById(@Param("branchId") Long branchId);
 
 }

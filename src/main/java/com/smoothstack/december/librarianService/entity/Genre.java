@@ -1,14 +1,11 @@
 package com.smoothstack.december.librarianService.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,29 +15,26 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "tbl_genre")
-public class Genre implements Serializable {
-
-    private static final long serialVersionUID = -7871622461454589536L;
+@Table
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "genreId")
-    private Long genreId;
+    private Long id;
 
-    @Column(name = "genreName")
+    @Column
     private String name;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "genres", cascade = { CascadeType.ALL })
     @JsonBackReference
     private Set<Book> books = new HashSet<>();
 
-    public Long getGenreId() {
-        return this.genreId;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setGenreId(Long genreId) {
-        this.genreId = genreId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,31 +51,6 @@ public class Genre implements Serializable {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
-    }
-
-    public void addBook(Book book) {
-        this.books.add(book);
-    }
-
-    public void removeBook(Book book) {
-        this.books.remove(book);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.genreId, this.name);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Genre)) {
-            return false;
-        }
-        Genre other = (Genre) obj;
-        return Objects.equals(this.genreId, other.genreId) && Objects.equals(this.name, other.name);
     }
 
 }

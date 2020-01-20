@@ -14,6 +14,7 @@ import com.smoothstack.december.librarianService.entity.BookCopy;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 
 @Service
+@Transactional
 public class LibrarianService {
 
     @Autowired
@@ -25,17 +26,14 @@ public class LibrarianService {
     @Autowired
     private LibraryBranchDAO libraryBranchDAO;
 
-    @Transactional
     public BookCopy updateBookCopy(BookCopy bookCopy) {
         return this.bookCopyDAO.save(bookCopy);
     }
 
-    @Transactional
-    public BookCopy addBookCopy(BookCopy bookCopy) {
+    public BookCopy createBookCopy(BookCopy bookCopy) {
         return this.bookCopyDAO.save(bookCopy);
     }
 
-    @Transactional
     public LibraryBranch updateLibraryBranch(LibraryBranch branch) {
         return this.libraryBranchDAO.save(branch);
     }
@@ -50,6 +48,10 @@ public class LibrarianService {
 
     public List<BookCopy> getBookCopies(Long branchId) {
         return this.bookCopyDAO.findBookCopiesById(branchId);
+    }
+
+    public Book createBook(Book book) {
+        return this.bookDAO.save(book);
     }
 
 }

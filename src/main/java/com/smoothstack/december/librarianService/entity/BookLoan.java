@@ -4,75 +4,66 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;;
+import javax.persistence.Table;;
 
 @Entity
-@Table(name = "tbl_book_loans")
-@AssociationOverrides({ @AssociationOverride(name = "bookLoanId.book", joinColumns = @JoinColumn(name = "bookId")),
-        @AssociationOverride(name = "bookLoanId.branch", joinColumns = @JoinColumn(name = "branchId")),
-        @AssociationOverride(name = "bookLoanId.borrower", joinColumns = @JoinColumn(name = "cardNo")) })
-public class BookLoan implements Serializable {
+@Table
+public class BookLoan {
 
     @Embeddable
     public static class BookLoanId implements Serializable {
 
         private static final long serialVersionUID = -8848058513226751763L;
 
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JoinColumn(name = "bookId")
-        @JsonBackReference
-        private Book book;
+        @Column
+        private Long bookId;
 
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JoinColumn(name = "branchId")
-        @JsonBackReference
-        private LibraryBranch branch;
+        @Column
+        private Long borrowerId;
 
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JoinColumn(name = "cardNo")
-        @JsonBackReference
-        private Borrower borrower;
+        @Column
+        private Long branchId;
 
-        public Book getBook() {
-            return this.book;
+        public BookLoanId() {
         }
 
-        public void setBook(Book book) {
-            this.book = book;
+        public BookLoanId(long bookId, long borrowerId, long branchId) {
+            this.bookId = bookId;
+            this.borrowerId = borrowerId;
+            this.branchId = branchId;
         }
 
-        public LibraryBranch getBranch() {
-            return this.branch;
+        public Long getBookId() {
+            return this.bookId;
         }
 
-        public void setBranch(LibraryBranch branch) {
-            this.branch = branch;
+        public void setBookId(Long bookId) {
+            this.bookId = bookId;
         }
 
-        public Borrower getBorrower() {
-            return this.borrower;
+        public Long getBorrowerId() {
+            return this.borrowerId;
         }
 
-        public void setBorrower(Borrower borrower) {
-            this.borrower = borrower;
+        public void setBorrowerId(Long borrowerId) {
+            this.borrowerId = borrowerId;
+        }
+
+        public Long getBranchId() {
+            return this.branchId;
+        }
+
+        public void setBranchId(Long branchId) {
+            this.branchId = branchId;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.book, this.borrower, this.branch);
+            return Objects.hash(this.bookId, this.borrowerId, this.branchId);
         }
 
         @Override
@@ -84,25 +75,31 @@ public class BookLoan implements Serializable {
                 return false;
             }
             BookLoanId other = (BookLoanId) obj;
-            return Objects.equals(this.book, other.book) && Objects.equals(this.borrower, other.borrower)
-                    && Objects.equals(this.branch, other.branch);
+            return Objects.equals(this.bookId, other.bookId) && Objects.equals(this.borrowerId, other.borrowerId)
+                    && Objects.equals(this.branchId, other.branchId);
         }
 
     }
 
-    private static final long serialVersionUID = 6976480817248770465L;
-
     @EmbeddedId
-    private BookLoanId bookLoanId = new BookLoanId();
+    private BookLoanId id;;
 
-    @Column(name = "dateOut")
+    @Column
     private LocalDate dateOut;
 
-    @Column(name = "dueDate")
+    @Column
     private LocalDate dueDate;
 
-    @Column(name = "dateIn")
+    @Column
     private LocalDate dateIn;
+
+    public BookLoanId getId() {
+        return this.id;
+    }
+
+    public void setId(BookLoanId id) {
+        this.id = id;
+    }
 
     public LocalDate getDateOut() {
         return this.dateOut;
@@ -126,51 +123,6 @@ public class BookLoan implements Serializable {
 
     public void setDateIn(LocalDate dateIn) {
         this.dateIn = dateIn;
-    }
-
-    @Transient
-    public Book getBook() {
-        return this.bookLoanId.getBook();
-    }
-
-    public void setBook(Book book) {
-        this.bookLoanId.setBook(book);
-    }
-
-    @Transient
-    public LibraryBranch getBranch() {
-        return this.bookLoanId.getBranch();
-    }
-
-    public void setBranch(LibraryBranch branch) {
-        this.bookLoanId.setBranch(branch);
-    }
-
-    @Transient
-    public Borrower getBorrower() {
-        return this.bookLoanId.getBorrower();
-    }
-
-    public void setBorrower(Borrower borrower) {
-        this.bookLoanId.setBorrower(borrower);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.bookLoanId, this.dateIn, this.dateOut, this.dueDate);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof BookLoan)) {
-            return false;
-        }
-        BookLoan other = (BookLoan) obj;
-        return Objects.equals(this.bookLoanId, other.bookLoanId) && Objects.equals(this.dateIn, other.dateIn)
-                && Objects.equals(this.dateOut, other.dateOut) && Objects.equals(this.dueDate, other.dueDate);
     }
 
 }

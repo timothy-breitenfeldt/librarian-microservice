@@ -1,8 +1,6 @@
 package com.smoothstack.december.librarianService.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,38 +12,35 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "tbl_publisher")
-public class Publisher implements Serializable {
-
-    private static final long serialVersionUID = 7377441833253328339L;
+@Table
+public class Publisher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "publisherId")
-    private Long publisherId;
+    private Long id;
 
-    @Column(name = "publisherName")
+    @Column
     private String name;
 
-    @Column(name = "publisherAddress")
+    @Column
     private String address;
 
-    @Column(name = "publisherPhone")
+    @Column
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "publisher", cascade = { CascadeType.ALL })
+    @JsonBackReference
     private Set<Book> books = new HashSet<>();
 
-    public Long getPublisherId() {
-        return this.publisherId;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setPublisherId(Long publisherId) {
-        this.publisherId = publisherId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -78,35 +73,6 @@ public class Publisher implements Serializable {
 
     public void setBooks(Set<Book> books) {
         this.books = books;
-    }
-
-    public void addBook(Book book) {
-        this.books.add(book);
-        book.setPublisher(this);
-    }
-
-    public void removeBook(Book book) {
-        this.books.remove(book);
-        book.setPublisher(null);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.address, this.name, this.phoneNumber, this.publisherId);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Publisher)) {
-            return false;
-        }
-        Publisher other = (Publisher) obj;
-        return Objects.equals(this.address, other.address) && Objects.equals(this.name, other.name)
-                && Objects.equals(this.phoneNumber, other.phoneNumber)
-                && Objects.equals(this.publisherId, other.publisherId);
     }
 
 }

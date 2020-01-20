@@ -3,61 +3,54 @@ package com.smoothstack.december.librarianService.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "tbl_book_copies")
-@AssociationOverrides({ @AssociationOverride(name = "bookCopyId.book", joinColumns = @JoinColumn(name = "bookId")),
-        @AssociationOverride(name = "bookCopyId.branch", joinColumns = @JoinColumn(name = "branchId")) })
-public class BookCopy implements Serializable {
+@Table
+public class BookCopy {
 
     @Embeddable
     public static class BookCopyId implements Serializable {
 
         private static final long serialVersionUID = 22619397635869180L;
 
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JoinColumn(name = "bookId")
-        @JsonBackReference
-        private Book book;
+        @Column
+        private Long bookId;
 
-        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JoinColumn(name = "branchId")
-        @JsonBackReference
-        private LibraryBranch branch;
+        @Column
+        private Long branchId;
 
-        public Book getBook() {
-            return this.book;
+        public BookCopyId() {
         }
 
-        public void setBook(Book book) {
-            this.book = book;
+        public BookCopyId(Long bookId, Long branchId) {
+            this.bookId = bookId;
+            this.branchId = branchId;
         }
 
-        public LibraryBranch getBranch() {
-            return this.branch;
+        public Long getBookId() {
+            return this.bookId;
         }
 
-        public void setBranch(LibraryBranch branch) {
-            this.branch = branch;
+        public void setBookId(Long bookId) {
+            this.bookId = bookId;
+        }
+
+        public Long getBranchId() {
+            return this.branchId;
+        }
+
+        public void setBranchId(Long branchId) {
+            this.branchId = branchId;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.book.getBookId(), this.branch.getBranchId());
+            return Objects.hash(this.bookId, this.branchId);
         }
 
         @Override
@@ -69,69 +62,31 @@ public class BookCopy implements Serializable {
                 return false;
             }
             BookCopyId other = (BookCopyId) obj;
-            return Objects.equals(this.book.getBookId(), other.book.getBookId())
-                    && Objects.equals(this.branch.getBranchId(), other.branch.getBranchId());
+            return Objects.equals(this.bookId, other.bookId) && Objects.equals(this.branchId, other.branchId);
         }
 
     }
 
-    private static final long serialVersionUID = -8766588377489959146L;
-
     @EmbeddedId
-    private BookCopyId bookCopyId = new BookCopyId();
+    private BookCopyId id;
 
-    @Column(name = "noOfCopies")
-    private Integer amount;
+    @Column
+    private Long amount;
 
-    public Integer getAmount() {
+    public BookCopyId getId() {
+        return this.id;
+    }
+
+    public void setId(BookCopyId id) {
+        this.id = id;
+    }
+
+    public Long getAmount() {
         return this.amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
-    }
-
-    @Transient
-    public Book getBook() {
-        return this.bookCopyId.getBook();
-    }
-
-    public void setBook(Book book) {
-        this.bookCopyId.setBook(book);
-    }
-
-    @Transient
-    public LibraryBranch getBranch() {
-        return this.bookCopyId.getBranch();
-    }
-
-    public void setBranch(LibraryBranch branch) {
-        this.bookCopyId.setBranch(branch);
-    }
-
-    public BookCopyId getBookCopyId() {
-        return this.bookCopyId;
-    }
-
-    public void setBookCopyId(BookCopyId bookCopyId) {
-        this.bookCopyId = bookCopyId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.amount, this.bookCopyId);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof BookCopy)) {
-            return false;
-        }
-        BookCopy other = (BookCopy) obj;
-        return Objects.equals(this.amount, other.amount) && Objects.equals(this.bookCopyId, other.bookCopyId);
     }
 
 }
