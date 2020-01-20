@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -24,15 +25,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class BookCopy implements Serializable {
 
     @Embeddable
-    private class BookCopyId implements Serializable {
+    public static class BookCopyId implements Serializable {
 
         private static final long serialVersionUID = 22619397635869180L;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "bookId")
         @JsonBackReference
         private Book book;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "branchId")
         @JsonBackReference
         private LibraryBranch branch;
 
@@ -54,11 +57,7 @@ public class BookCopy implements Serializable {
 
         @Override
         public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + this.getEnclosingInstance().hashCode();
-            result = prime * result + Objects.hash(this.book, this.branch);
-            return result;
+            return Objects.hash(this.book.getBookId(), this.branch.getBranchId());
         }
 
         @Override
@@ -70,14 +69,8 @@ public class BookCopy implements Serializable {
                 return false;
             }
             BookCopyId other = (BookCopyId) obj;
-            if (!this.getEnclosingInstance().equals(other.getEnclosingInstance())) {
-                return false;
-            }
-            return Objects.equals(this.book, other.book) && Objects.equals(this.branch, other.branch);
-        }
-
-        private BookCopy getEnclosingInstance() {
-            return BookCopy.this;
+            return Objects.equals(this.book.getBookId(), other.book.getBookId())
+                    && Objects.equals(this.branch.getBranchId(), other.branch.getBranchId());
         }
 
     }
@@ -114,6 +107,14 @@ public class BookCopy implements Serializable {
 
     public void setBranch(LibraryBranch branch) {
         this.bookCopyId.setBranch(branch);
+    }
+
+    public BookCopyId getBookCopyId() {
+        return this.bookCopyId;
+    }
+
+    public void setBookCopyId(BookCopyId bookCopyId) {
+        this.bookCopyId = bookCopyId;
     }
 
     @Override

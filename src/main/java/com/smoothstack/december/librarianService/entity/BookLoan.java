@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -26,19 +27,22 @@ import com.fasterxml.jackson.annotation.JsonBackReference;;
 public class BookLoan implements Serializable {
 
     @Embeddable
-    private class BookLoanId implements Serializable {
+    public static class BookLoanId implements Serializable {
 
         private static final long serialVersionUID = -8848058513226751763L;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "bookId")
         @JsonBackReference
         private Book book;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "branchId")
         @JsonBackReference
         private LibraryBranch branch;
 
-        @ManyToOne(cascade = CascadeType.ALL)
+        @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "cardNo")
         @JsonBackReference
         private Borrower borrower;
 
@@ -68,11 +72,7 @@ public class BookLoan implements Serializable {
 
         @Override
         public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + this.getEnclosingInstance().hashCode();
-            result = prime * result + Objects.hash(this.book, this.borrower, this.branch);
-            return result;
+            return Objects.hash(this.book, this.borrower, this.branch);
         }
 
         @Override
@@ -84,15 +84,8 @@ public class BookLoan implements Serializable {
                 return false;
             }
             BookLoanId other = (BookLoanId) obj;
-            if (!this.getEnclosingInstance().equals(other.getEnclosingInstance())) {
-                return false;
-            }
             return Objects.equals(this.book, other.book) && Objects.equals(this.borrower, other.borrower)
                     && Objects.equals(this.branch, other.branch);
-        }
-
-        private BookLoan getEnclosingInstance() {
-            return BookLoan.this;
         }
 
     }

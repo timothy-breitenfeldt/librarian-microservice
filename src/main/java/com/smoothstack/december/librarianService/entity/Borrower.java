@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +37,7 @@ public class Borrower implements Serializable {
     @Column(name = "phone")
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "bookLoanId.borrower", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bookLoanId.borrower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<BookLoan> bookLoans = new HashSet<>();
 
