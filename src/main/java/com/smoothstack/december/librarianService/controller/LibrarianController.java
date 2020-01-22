@@ -3,6 +3,7 @@ package com.smoothstack.december.librarianService.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,8 @@ public class LibrarianController {
         return this.librarianService.createBookCopy(bookCopy);
     }
 
-    @PostMapping("/books")
+    @PostMapping(path = "/books", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+            MediaType.APPLICATION_JSON_VALUE })
     public Book createBook(@RequestBody Book book) {
         return this.librarianService.createBook(book);
     }
@@ -43,7 +45,7 @@ public class LibrarianController {
         return this.librarianService.updateLibraryBranch(branch);
     }
 
-    @GetMapping("/books")
+    @GetMapping(value = "/books")
     public List<Book> getBooks() {
         return this.librarianService.getBooks();
     }

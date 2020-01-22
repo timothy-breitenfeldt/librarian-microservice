@@ -14,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table
 public class Book {
@@ -29,17 +27,14 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)
-    @JsonManagedReference
     private Publisher publisher;
 
     @ManyToMany
     @JoinTable
-    @JsonManagedReference
     private Set<Author> authors = new HashSet<>();
 
     @ManyToMany
     @JoinTable
-    @JsonManagedReference
     private Set<Genre> genres = new HashSet<>();
 
     public Long getId() {
