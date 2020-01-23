@@ -8,7 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Table;;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;;
 
 @Entity
 @Table
@@ -19,51 +25,57 @@ public class BookLoan {
 
         private static final long serialVersionUID = -8848058513226751763L;
 
-        @Column
-        private Long bookId;
+        @ManyToOne
+        @JoinColumn(name = "book_id")
+        private Book book;
 
-        @Column
-        private Long borrowerId;
+        @ManyToOne
+        @JoinColumn(name = "borrower_id")
+        private Borrower borrower;
 
-        @Column
-        private Long branchId;
+        @ManyToOne
+        @JoinColumn(name = "branch_id")
+        private LibraryBranch branch;
 
         public BookLoanId() {
         }
 
         public BookLoanId(long bookId, long borrowerId, long branchId) {
-            this.bookId = bookId;
-            this.borrowerId = borrowerId;
-            this.branchId = branchId;
+            this.book = new Book();
+            this.borrower = new Borrower();
+            this.branch = new LibraryBranch();
+            this.book.setId(bookId);
+            this.borrower.setId(borrowerId);
+            this.branch.setId(branchId);
         }
 
-        public Long getBookId() {
-            return this.bookId;
+        public Book getBook() {
+            return this.book;
         }
 
-        public void setBookId(Long bookId) {
-            this.bookId = bookId;
+        public void setBook(Book book) {
+            this.book = book;
         }
 
-        public Long getBorrowerId() {
-            return this.borrowerId;
+        public Borrower getBorrower() {
+            return this.borrower;
         }
 
-        public void setBorrowerId(Long borrowerId) {
-            this.borrowerId = borrowerId;
+        public void setBorrower(Borrower borrower) {
+            this.borrower = borrower;
         }
 
-        public Long getBranchId() {
-            return this.branchId;
+        public LibraryBranch getBranch() {
+            return this.branch;
         }
 
-        public void setBranchId(Long branchId) {
-            this.branchId = branchId;
+        public void setBranch(LibraryBranch branch) {
+            this.branch = branch;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.bookId, this.borrowerId, this.branchId);
+            return Objects.hash(this.book.getId(), this.borrower.getId(), this.branch.getId());
         }
 
         @Override
@@ -75,8 +87,9 @@ public class BookLoan {
                 return false;
             }
             BookLoanId other = (BookLoanId) obj;
-            return Objects.equals(this.bookId, other.bookId) && Objects.equals(this.borrowerId, other.borrowerId)
-                    && Objects.equals(this.branchId, other.branchId);
+            return Objects.equals(this.book.getId(), other.book.getId())
+                    && Objects.equals(this.borrower.getId(), other.borrower.getId())
+                    && Objects.equals(this.branch.getId(), other.branch.getId());
         }
 
     }
@@ -85,12 +98,18 @@ public class BookLoan {
     private BookLoanId id;;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateOut;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dueDate;
 
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateIn;
 
     public BookLoanId getId() {
