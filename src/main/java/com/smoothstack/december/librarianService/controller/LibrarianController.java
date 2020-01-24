@@ -25,6 +25,7 @@ import com.smoothstack.december.librarianService.entity.BookCopy.BookCopyId;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 import com.smoothstack.december.librarianService.exception.ArgumentMissingException;
 import com.smoothstack.december.librarianService.exception.IllegalRelationReferenceException;
+import com.smoothstack.december.librarianService.exception.ResourceAlreadyExistsException;
 import com.smoothstack.december.librarianService.service.LibrarianService;
 
 @RestController
@@ -48,6 +49,8 @@ public class LibrarianController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
         } catch (IllegalRelationReferenceException irre) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
+        } catch (ResourceAlreadyExistsException raee) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, raee.getMessage(), raee);
         } catch (Exception e) {
             logger.error(e.toString());
         }
@@ -67,6 +70,8 @@ public class LibrarianController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
         } catch (IllegalRelationReferenceException irre) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
+        } catch (ResourceAlreadyExistsException raee) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, raee.getMessage(), raee);
         } catch (Exception e) {
             logger.error(e.toString());
         }

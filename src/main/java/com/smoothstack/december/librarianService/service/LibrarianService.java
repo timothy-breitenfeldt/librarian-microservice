@@ -18,6 +18,7 @@ import com.smoothstack.december.librarianService.entity.Genre;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 import com.smoothstack.december.librarianService.exception.ArgumentMissingException;
 import com.smoothstack.december.librarianService.exception.IllegalRelationReferenceException;
+import com.smoothstack.december.librarianService.exception.ResourceAlreadyExistsException;
 
 @Service
 @Transactional
@@ -57,14 +58,14 @@ public class LibrarianService {
         if (!this.libraryBranchDAO.existsById(bookCopy.getId().getBranch().getId())) {
             throw new IllegalRelationReferenceException("Library branch does not exist");
         }
+        if (this.bookCopyDAO.existsById(bookCopy.getId())) {
+            throw new ResourceAlreadyExistsException("A book copy with this id already exists");
+        }
 
         return this.bookCopyDAO.save(bookCopy);
     }
 
     public Book createBook(Book book) {
-        if (book.getId() == null) {
-            throw new ArgumentMissingException("Missing 'id'");
-        }
         if (book.getTitle() == null) {
             throw new ArgumentMissingException("Missing 'title'");
         }
@@ -94,6 +95,9 @@ public class LibrarianService {
                 throw new IllegalRelationReferenceException(
                         "The genre with id of " + genre.getId() + " does not exist");
             }
+        }
+        if (this.bookDAO.existsById(book.getId())) {
+            throw new ResourceAlreadyExistsException("A book with this id already exists");
         }
 
         return this.bookDAO.save(book);
