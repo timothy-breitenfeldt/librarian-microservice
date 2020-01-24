@@ -63,4 +63,10 @@ public class Borrower {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Borrower [id=" + this.id + ", name=" + this.name + ", address=" + this.address + ", phoneNumber="
+                + this.phoneNumber + "]";
+    }
+
 }

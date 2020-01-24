@@ -92,6 +92,11 @@ public class BookLoan {
                     && Objects.equals(this.branch.getId(), other.branch.getId());
         }
 
+        @Override
+        public String toString() {
+            return "BookLoanId [book=" + this.book + ", borrower=" + this.borrower + ", branch=" + this.branch + "]";
+        }
+
     }
 
     @EmbeddedId
@@ -142,6 +147,12 @@ public class BookLoan {
 
     public void setDateIn(LocalDate dateIn) {
         this.dateIn = dateIn;
+    }
+
+    @Override
+    public String toString() {
+        return "BookLoan [id=" + this.id + ", dateOut=" + this.dateOut + ", dueDate=" + this.dueDate + ", dateIn="
+                + this.dateIn + "]";
     }
 
 }

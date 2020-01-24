@@ -71,4 +71,10 @@ public class Publisher {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Publisher [id=" + this.id + ", name=" + this.name + ", address=" + this.address + ", phoneNumber="
+                + this.phoneNumber + ", books=" + this.books + "]";
+    }
+
 }

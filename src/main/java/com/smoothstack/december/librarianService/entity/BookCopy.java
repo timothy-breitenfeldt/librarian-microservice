@@ -73,6 +73,11 @@ public class BookCopy {
                     && Objects.equals(this.branch.getId(), other.branch.getId());
         }
 
+        @Override
+        public String toString() {
+            return "BookCopyId [book=" + this.book + ", branch=" + this.branch + "]";
+        }
+
     }
 
     @EmbeddedId
@@ -96,6 +101,11 @@ public class BookCopy {
 
     public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "BookCopy [id=" + this.id + ", amount=" + this.amount + "]";
     }
 
 }

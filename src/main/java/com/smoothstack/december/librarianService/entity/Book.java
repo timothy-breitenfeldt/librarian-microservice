@@ -89,4 +89,10 @@ public class Book {
         this.genres.add(genre);
     }
 
+    @Override
+    public String toString() {
+        return "Book [id=" + this.id + ", title=" + this.title + ", publisher=" + this.publisher + ", authors="
+                + this.authors + ", genres=" + this.genres + "]";
+    }
+
 }

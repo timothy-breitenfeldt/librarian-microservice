@@ -61,4 +61,10 @@ public class LibraryBranch {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "LibraryBranch [id=" + this.id + ", name=" + this.name + ", address=" + this.address + ", bookCopies="
+                + this.bookCopies + ", bookLoans=" + this.bookLoans + "]";
+    }
+
 }
