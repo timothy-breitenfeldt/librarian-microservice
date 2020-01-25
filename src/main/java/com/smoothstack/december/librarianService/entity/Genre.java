@@ -48,7 +48,7 @@ public class Genre {
 
     @Override
     public String toString() {
-        return "Genre [id=" + this.id + ", name=" + this.name + ", books=" + this.books + "]";
+        return "Genre [id=" + this.id + ", name=" + this.name + "]";
     }
 
 }

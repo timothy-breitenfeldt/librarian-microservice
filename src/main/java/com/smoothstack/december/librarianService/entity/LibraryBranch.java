@@ -63,8 +63,7 @@ public class LibraryBranch {
 
     @Override
     public String toString() {
-        return "LibraryBranch [id=" + this.id + ", name=" + this.name + ", address=" + this.address + ", bookCopies="
-                + this.bookCopies + ", bookLoans=" + this.bookLoans + "]";
+        return "LibraryBranch [id=" + this.id + ", name=" + this.name + ", address=" + this.address + "]";
     }
 
 }
