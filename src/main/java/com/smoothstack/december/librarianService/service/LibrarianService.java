@@ -43,10 +43,10 @@ public class LibrarianService {
         if (bookCopy.getId() == null) {
             throw new ArgumentMissingException("Missing 'id'");
         }
-        if (bookCopy.getId().getBook().getId() == null) {
+        if (bookCopy.getId().getBook() == null || bookCopy.getId().getBook().getId() == null) {
             throw new ArgumentMissingException("Missing 'book: {id}'");
         }
-        if (bookCopy.getId().getBranch().getId() == null) {
+        if (bookCopy.getId().getBranch() == null || bookCopy.getId().getBranch().getId() == null) {
             throw new ArgumentMissingException("Missing 'branch: {id}'");
         }
         if (bookCopy.getAmount() == null) {
@@ -69,7 +69,7 @@ public class LibrarianService {
         if (book.getTitle() == null) {
             throw new ArgumentMissingException("Missing 'title'");
         }
-        if (book.getPublisher().getId() == null) {
+        if (book.getPublisher() == null || book.getPublisher().getId() == null) {
             throw new ArgumentMissingException("Missing 'publisher: {id}'");
         }
         if (book.getAuthors().size() == 0) {
@@ -96,7 +96,7 @@ public class LibrarianService {
                         "The genre with id of " + genre.getId() + " does not exist");
             }
         }
-        if (this.bookDAO.existsById(book.getId())) {
+        if (book.getId() != null && this.bookDAO.existsById(book.getId())) {
             throw new ResourceAlreadyExistsException("A book with this id already exists");
         }
 

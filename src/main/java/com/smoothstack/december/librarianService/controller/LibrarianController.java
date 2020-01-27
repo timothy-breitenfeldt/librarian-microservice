@@ -17,15 +17,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.smoothstack.december.librarianService.entity.Book;
 import com.smoothstack.december.librarianService.entity.BookCopy;
 import com.smoothstack.december.librarianService.entity.BookCopy.BookCopyId;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
-import com.smoothstack.december.librarianService.exception.ArgumentMissingException;
-import com.smoothstack.december.librarianService.exception.IllegalRelationReferenceException;
-import com.smoothstack.december.librarianService.exception.ResourceAlreadyExistsException;
 import com.smoothstack.december.librarianService.service.LibrarianService;
 
 @RestController
@@ -39,128 +35,59 @@ public class LibrarianController {
 
     @PostMapping("/book-copies")
     public ResponseEntity<BookCopy> createBookCopy(@RequestBody @Valid BookCopy bookCopy) {
-        BookCopy response = null;
-
-        try {
-            logger.debug("request: {}", bookCopy.toString());
-            response = this.librarianService.createBookCopy(bookCopy);
-            logger.debug("response: {}", response.toString());
-        } catch (ArgumentMissingException ame) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
-        } catch (IllegalRelationReferenceException irre) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
-        } catch (ResourceAlreadyExistsException raee) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, raee.getMessage(), raee);
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        logger.debug("request: {}", bookCopy.toString());
+        BookCopy response = this.librarianService.createBookCopy(bookCopy);
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<BookCopy>(response, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/books")
     public ResponseEntity<Book> createBook(@RequestBody @Valid Book book) {
-        Book response = null;
-
-        try {
-            logger.debug("request: {}", book.toString());
-            response = this.librarianService.createBook(book);
-            logger.debug("request: {}", response.toString());
-        } catch (ArgumentMissingException ame) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
-        } catch (IllegalRelationReferenceException irre) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
-        } catch (ResourceAlreadyExistsException raee) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, raee.getMessage(), raee);
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        logger.debug("request: {}", book.toString());
+        Book response = this.librarianService.createBook(book);
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<Book>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/books")
     public ResponseEntity<List<Book>> getBooks() {
-        List<Book> response = null;
-
-        try {
-            response = this.librarianService.getBooks();
-            logger.debug("response: {}", response.toString());
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        List<Book> response = this.librarianService.getBooks();
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<List<Book>>(response, HttpStatus.OK);
     }
 
     @GetMapping("/branches")
     public ResponseEntity<List<LibraryBranch>> getLibraryBranches() {
-        List<LibraryBranch> response = null;
-
-        try {
-            response = this.librarianService.getLibraryBranches();
-            logger.debug("response: {}", response.toString());
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        List<LibraryBranch> response = this.librarianService.getLibraryBranches();
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<List<LibraryBranch>>(response, HttpStatus.OK);
     }
 
     @GetMapping("/book-copies/branches/{branchId}")
     public ResponseEntity<List<BookCopy>> getBookCopies(@PathVariable @Min(1) Long branchId) {
-        List<BookCopy> response = null;
-
-        try {
-            logger.debug("request: {}", branchId.toString());
-            response = this.librarianService.getBookCopiesById(branchId);
-            logger.debug("response: {}", response.toString());
-        } catch (IllegalRelationReferenceException irre) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        logger.debug("request: {}", branchId.toString());
+        List<BookCopy> response = this.librarianService.getBookCopiesById(branchId);
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<List<BookCopy>>(response, HttpStatus.OK);
     }
 
     @PutMapping("/book-copies/books/{bookId}/branches/{branchId}")
     public ResponseEntity<BookCopy> updateBookCopy(@PathVariable @Min(1) Long bookId,
             @PathVariable @Min(1) Long branchId, @RequestBody @Valid BookCopy bookCopy) {
-        BookCopy response = null;
-
-        try {
-            bookCopy.setId(new BookCopyId(bookId, branchId));
-            logger.debug("request: {}", bookCopy.toString());
-            response = this.librarianService.updateBookCopy(bookCopy);
-            logger.debug("response: {}", response.toString());
-        } catch (ArgumentMissingException ame) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
-        } catch (IllegalRelationReferenceException irre) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, irre.getMessage(), irre);
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        bookCopy.setId(new BookCopyId(bookId, branchId));
+        logger.debug("request: {}", bookCopy.toString());
+        BookCopy response = this.librarianService.updateBookCopy(bookCopy);
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<BookCopy>(response, HttpStatus.OK);
     }
 
     @PutMapping("/branches/{branchId}")
     public ResponseEntity<LibraryBranch> updateLibraryBranch(@PathVariable @Min(1) Long branchId,
             @RequestBody @Valid LibraryBranch branch) {
-        LibraryBranch response = null;
-
-        try {
-            branch.setId(branchId);
-            logger.debug("request: {}", branch.toString());
-            response = this.librarianService.updateLibraryBranch(branch);
-            logger.debug("response: {}", response.toString());
-        } catch (ArgumentMissingException ame) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ame.getMessage(), ame);
-        } catch (Exception e) {
-            logger.error(e.toString());
-        }
-
+        branch.setId(branchId);
+        logger.debug("request: {}", branch.toString());
+        LibraryBranch response = this.librarianService.updateLibraryBranch(branch);
+        logger.debug("response: {}", response.toString());
         return new ResponseEntity<LibraryBranch>(response, HttpStatus.OK);
     }
 

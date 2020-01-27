@@ -1,10 +1,15 @@
 package com.smoothstack.december.librarianService.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -30,6 +35,9 @@ public class Borrower {
     @Column
     @Pattern(regexp = "(^$|[0-9]{10})")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "id.borrower", cascade = CascadeType.ALL)
+    private Set<BookLoan> bookLoans = new HashSet<>();
 
     public Long getId() {
         return this.id;

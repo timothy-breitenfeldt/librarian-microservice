@@ -3,6 +3,7 @@ package com.smoothstack.december.librarianService.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Author {
     @Size(min = 2, max = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 
     public Long getId() {
@@ -47,7 +48,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author [id=" + this.id + ", name=" + this.name + ", books=" + this.books + "]";
+        return "Author [id=" + this.id + ", name=" + this.name + "]";
     }
 
 }

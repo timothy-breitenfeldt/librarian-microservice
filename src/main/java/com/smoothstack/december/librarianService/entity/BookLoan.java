@@ -100,7 +100,7 @@ public class BookLoan {
     }
 
     @EmbeddedId
-    private BookLoanId id;;
+    private BookLoanId id;
 
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
