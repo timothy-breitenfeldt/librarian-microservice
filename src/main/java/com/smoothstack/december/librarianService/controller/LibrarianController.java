@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -89,6 +90,14 @@ public class LibrarianController {
         LibraryBranch response = this.librarianService.updateLibraryBranch(branch);
         logger.debug("response: {}", response.toString());
         return new ResponseEntity<LibraryBranch>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/book-copies/books/{bookId}/branches/{branchId}")
+    public ResponseEntity<BookCopy> deleteBookCopy(@PathVariable @Min(1) Long bookId,
+            @PathVariable @Min(1) Long branchId) {
+        logger.debug("request: bookId=[], branchId={}", bookId, branchId);
+        this.librarianService.deleteBookCopy(new BookCopyId(bookId, branchId));
+        return new ResponseEntity<BookCopy>(HttpStatus.NO_CONTENT);
     }
 
 }

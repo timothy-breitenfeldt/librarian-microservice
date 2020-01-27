@@ -14,10 +14,12 @@ import com.smoothstack.december.librarianService.dao.LibraryBranchDAO;
 import com.smoothstack.december.librarianService.entity.Author;
 import com.smoothstack.december.librarianService.entity.Book;
 import com.smoothstack.december.librarianService.entity.BookCopy;
+import com.smoothstack.december.librarianService.entity.BookCopy.BookCopyId;
 import com.smoothstack.december.librarianService.entity.Genre;
 import com.smoothstack.december.librarianService.entity.LibraryBranch;
 import com.smoothstack.december.librarianService.exception.ArgumentMissingException;
 import com.smoothstack.december.librarianService.exception.IllegalRelationReferenceException;
+import com.smoothstack.december.librarianService.exception.ItemNotFoundException;
 import com.smoothstack.december.librarianService.exception.ResourceAlreadyExistsException;
 
 @Service
@@ -154,6 +156,23 @@ public class LibrarianService {
         }
 
         return this.libraryBranchDAO.save(branch);
+    }
+
+    public void deleteBookCopy(BookCopyId bookCopyId) {
+        if (bookCopyId == null) {
+            throw new ArgumentMissingException("Missing book copy id");
+        }
+        if (bookCopyId.getBook() == null || bookCopyId.getBook().getId() == null) {
+            throw new ArgumentMissingException("Missing book {id}");
+        }
+        if (bookCopyId.getBranch() == null || bookCopyId.getBranch().getId() == null) {
+            throw new ArgumentMissingException("Missing branch {id}");
+        }
+        if (!this.bookCopyDAO.existsById(bookCopyId)) {
+            throw new ItemNotFoundException("Item not found");
+        }
+
+        this.bookCopyDAO.deleteById(bookCopyId);
     }
 
 }
