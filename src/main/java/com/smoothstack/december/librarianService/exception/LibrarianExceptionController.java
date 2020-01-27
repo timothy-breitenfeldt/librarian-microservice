@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.smoothstack.december.librarianService.controller.LibrarianController;
-
 @ControllerAdvice
 public class LibrarianExceptionController extends ResponseEntityExceptionHandler {
 
-    private static final Logger logger = LogManager.getLogger(LibrarianController.class);
+    private static final Logger logger = LogManager.getLogger(LibrarianExceptionController.class);
 
     @ExceptionHandler(value = ArgumentMissingException.class)
     public ResponseEntity<ApiError> handleException(ArgumentMissingException exception) {
