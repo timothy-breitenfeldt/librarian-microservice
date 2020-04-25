@@ -30,4 +30,6 @@ build/
 ### VS Code ###
 .vscode/
 
-*.log
+### MISC ###
+.notes.txt
+.DS_Store
