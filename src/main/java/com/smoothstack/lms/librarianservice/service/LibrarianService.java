@@ -1,6 +1,7 @@
 package com.smoothstack.lms.librarianservice.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.smoothstack.lms.librarianservice.dao.LibraryBranchDAO;
 import com.smoothstack.lms.librarianservice.entity.Author;
 import com.smoothstack.lms.librarianservice.entity.Book;
 import com.smoothstack.lms.librarianservice.entity.BookCopy;
+import com.smoothstack.lms.librarianservice.entity.BookCopy.BookCopyId;
 import com.smoothstack.lms.librarianservice.entity.Genre;
 import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 import com.smoothstack.lms.librarianservice.exception.ArgumentMissingException;
@@ -103,12 +105,35 @@ public class LibrarianService {
         return this.bookDAO.save(book);
     }
 
-    public List<Book> getBooks() {
-        return this.bookDAO.findAll();
+    public List<Book> getBooksNotInBookCopies(Long branchId) {
+        if (!this.libraryBranchDAO.existsById(branchId)) {
+            throw new IllegalRelationReferenceException("Library branch does not exist");
+        }
+
+        List<BookCopy> bookCopies = this.bookCopyDAO.findBookCopiesById(branchId);
+        List<Book> books = this.bookDAO.findAll();
+        List<Book> result = books.stream().filter(b -> {
+            for (BookCopy bc : bookCopies) {
+                if (b.getId() == bc.getId().getBook().getId()) {
+                    return false;
+                }
+            }
+            return true;
+        }).collect(Collectors.toList());
+
+        return result;
     }
 
     public List<LibraryBranch> getLibraryBranches() {
         return this.libraryBranchDAO.findAll();
+    }
+
+    public LibraryBranch getLibraryBranchById(Long branchId) {
+        if (!this.libraryBranchDAO.existsById(branchId)) {
+            throw new IllegalRelationReferenceException("Library branch does not exist");
+        }
+
+        return this.libraryBranchDAO.findById(branchId).get();
     }
 
     public List<BookCopy> getBookCopiesById(Long branchId) {
@@ -154,6 +179,20 @@ public class LibrarianService {
         }
 
         return this.libraryBranchDAO.save(branch);
+    }
+
+    public void removeBookCopy(BookCopyId bookCopyId) {
+        if (bookCopyId.getBook().getId() == null) {
+            throw new ArgumentMissingException("Missing book 'id'");
+        }
+        if (bookCopyId.getBranch().getId() == null) {
+            throw new ArgumentMissingException("Missing library branch  'id'");
+        }
+        if (!this.bookCopyDAO.existsById(bookCopyId)) {
+            throw new IllegalRelationReferenceException("Book copy does not exist");
+        }
+
+        this.bookCopyDAO.deleteById(bookCopyId);
     }
 
 }

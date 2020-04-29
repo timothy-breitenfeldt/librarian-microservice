@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smoothstack.lms.librarianservice.entity.Book;
 import com.smoothstack.lms.librarianservice.entity.BookCopy;
-import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 import com.smoothstack.lms.librarianservice.entity.BookCopy.BookCopyId;
+import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 import com.smoothstack.lms.librarianservice.service.LibrarianService;
 
 @RestController
@@ -49,9 +50,9 @@ public class LibrarianController {
         return new ResponseEntity<Book>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/books")
-    public ResponseEntity<List<Book>> getBooks() {
-        List<Book> response = this.librarianService.getBooks();
+    @GetMapping("/books/book-copies/branches/{branchId}")
+    public ResponseEntity<List<Book>> getBooksNotInBookCopies(@PathVariable @Min(1) Long branchId) {
+        List<Book> response = this.librarianService.getBooksNotInBookCopies(branchId);
         logger.debug("response: {}", response.toString());
         return new ResponseEntity<List<Book>>(response, HttpStatus.OK);
     }
@@ -61,6 +62,13 @@ public class LibrarianController {
         List<LibraryBranch> response = this.librarianService.getLibraryBranches();
         logger.debug("response: {}", response.toString());
         return new ResponseEntity<List<LibraryBranch>>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/branches/{branchId}")
+    public ResponseEntity<LibraryBranch> getLibraryBranchById(@PathVariable @Min(1) Long branchId) {
+        LibraryBranch response = this.librarianService.getLibraryBranchById(branchId);
+        logger.debug("response: {}", response.toString());
+        return new ResponseEntity<LibraryBranch>(response, HttpStatus.OK);
     }
 
     @GetMapping("/book-copies/branches/{branchId}")
@@ -89,6 +97,14 @@ public class LibrarianController {
         LibraryBranch response = this.librarianService.updateLibraryBranch(branch);
         logger.debug("response: {}", response.toString());
         return new ResponseEntity<LibraryBranch>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/book-copies/books/{bookId}/branches/{branchId}")
+    public ResponseEntity<BookCopy> removeBookCopy(@PathVariable @Min(1) Long bookId,
+            @PathVariable @Min(1) Long branchId) {
+        logger.debug("bookId: {}, branchId: {}", bookId, branchId);
+        this.librarianService.removeBookCopy(new BookCopyId(bookId, branchId));
+        return new ResponseEntity<BookCopy>(HttpStatus.NO_CONTENT);
     }
 
 }
