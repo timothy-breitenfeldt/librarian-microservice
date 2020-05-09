@@ -42,14 +42,6 @@ public class LibrarianController {
         return new ResponseEntity<BookCopy>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/books")
-    public ResponseEntity<Book> createBook(@RequestBody @Valid Book book) {
-        logger.debug("request: {}", book.toString());
-        Book response = this.librarianService.createBook(book);
-        logger.debug("response: {}", response.toString());
-        return new ResponseEntity<Book>(response, HttpStatus.CREATED);
-    }
-
     @GetMapping("/books/book-copies/branches/{branchId}")
     public ResponseEntity<List<Book>> getBooksNotInBookCopies(@PathVariable @Min(1) Long branchId) {
         List<Book> response = this.librarianService.getBooksNotInBookCopies(branchId);

@@ -12,11 +12,9 @@ import com.smoothstack.lms.librarianservice.dao.BookCopyDAO;
 import com.smoothstack.lms.librarianservice.dao.BookDAO;
 import com.smoothstack.lms.librarianservice.dao.GenreDAO;
 import com.smoothstack.lms.librarianservice.dao.LibraryBranchDAO;
-import com.smoothstack.lms.librarianservice.entity.Author;
 import com.smoothstack.lms.librarianservice.entity.Book;
 import com.smoothstack.lms.librarianservice.entity.BookCopy;
 import com.smoothstack.lms.librarianservice.entity.BookCopy.BookCopyId;
-import com.smoothstack.lms.librarianservice.entity.Genre;
 import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 import com.smoothstack.lms.librarianservice.exception.ArgumentMissingException;
 import com.smoothstack.lms.librarianservice.exception.IllegalRelationReferenceException;
@@ -65,44 +63,6 @@ public class LibrarianService {
         }
 
         return this.bookCopyDAO.save(bookCopy);
-    }
-
-    public Book createBook(Book book) {
-        if (book.getTitle() == null) {
-            throw new ArgumentMissingException("Missing 'title'");
-        }
-        if (book.getPublisher() == null || book.getPublisher().getId() == null) {
-            throw new ArgumentMissingException("Missing 'publisher: {id}'");
-        }
-        if (book.getAuthors().size() == 0) {
-            throw new ArgumentMissingException("Missing 'authors: [{id}]'");
-        }
-        if (book.getGenres().size() == 0) {
-            throw new ArgumentMissingException("Missing 'genres: [{id}]'");
-        }
-        for (Author author : book.getAuthors()) {
-            if (author.getId() == null) {
-                throw new ArgumentMissingException("Missing 'authors [{id}]");
-            }
-            if (!this.authorDAO.existsById(author.getId())) {
-                throw new IllegalRelationReferenceException(
-                        "The author with id of " + author.getId() + " does not exist");
-            }
-        }
-        for (Genre genre : book.getGenres()) {
-            if (genre.getId() == null) {
-                throw new ArgumentMissingException("Missing 'genres [{id}]");
-            }
-            if (!this.genreDAO.existsById(genre.getId())) {
-                throw new IllegalRelationReferenceException(
-                        "The genre with id of " + genre.getId() + " does not exist");
-            }
-        }
-        if (book.getId() != null && this.bookDAO.existsById(book.getId())) {
-            throw new ResourceAlreadyExistsException("A book with this id already exists");
-        }
-
-        return this.bookDAO.save(book);
     }
 
     public List<Book> getBooksNotInBookCopies(Long branchId) {
