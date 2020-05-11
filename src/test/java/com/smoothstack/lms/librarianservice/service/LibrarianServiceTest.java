@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.smoothstack.lms.librarianservice.dao.AuthorDAO;
 import com.smoothstack.lms.librarianservice.dao.BookCopyDAO;
@@ -30,7 +29,6 @@ import com.smoothstack.lms.librarianservice.exception.ArgumentMissingException;
 import com.smoothstack.lms.librarianservice.exception.IllegalRelationReferenceException;
 import com.smoothstack.lms.librarianservice.exception.ResourceAlreadyExistsException;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class LibrarianServiceTest {
 
