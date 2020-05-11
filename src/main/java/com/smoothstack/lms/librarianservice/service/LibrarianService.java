@@ -40,6 +40,9 @@ public class LibrarianService {
     private LibraryBranchDAO libraryBranchDAO;
 
     public BookCopy createBookCopy(BookCopy bookCopy) {
+        if (bookCopy == null) {
+            throw new ArgumentMissingException("Missing book copy object");
+        }
         if (bookCopy.getId() == null) {
             throw new ArgumentMissingException("Missing 'id'");
         }
@@ -66,6 +69,9 @@ public class LibrarianService {
     }
 
     public List<Book> getBooksNotInBookCopies(Long branchId) {
+        if (branchId == null) {
+            throw new ArgumentMissingException("Missing 'id'");
+        }
         if (!this.libraryBranchDAO.existsById(branchId)) {
             throw new IllegalRelationReferenceException("Library branch does not exist");
         }
@@ -89,6 +95,9 @@ public class LibrarianService {
     }
 
     public LibraryBranch getLibraryBranchById(Long branchId) {
+        if (branchId == null) {
+            throw new ArgumentMissingException("Missing 'id'");
+        }
         if (!this.libraryBranchDAO.existsById(branchId)) {
             throw new IllegalRelationReferenceException("Library branch does not exist");
         }
@@ -97,6 +106,9 @@ public class LibrarianService {
     }
 
     public List<BookCopy> getBookCopiesById(Long branchId) {
+        if (branchId == null) {
+            throw new ArgumentMissingException("Missing branch: {id}");
+        }
         if (!this.libraryBranchDAO.existsById(branchId)) {
             throw new IllegalRelationReferenceException("Library branch does not exist");
         }
@@ -105,29 +117,32 @@ public class LibrarianService {
     }
 
     public BookCopy updateBookCopy(BookCopy bookCopy) {
+        if (bookCopy == null) {
+            throw new ArgumentMissingException("Missing book copy object");
+        }
         if (bookCopy.getId() == null) {
             throw new ArgumentMissingException("Missing book copy 'id'");
         }
-        if (bookCopy.getId().getBook().getId() == null) {
+        if (bookCopy.getId().getBook() == null || bookCopy.getId().getBook().getId() == null) {
             throw new ArgumentMissingException("Missing 'book: {id}'");
         }
-        if (bookCopy.getId().getBranch().getId() == null) {
+        if (bookCopy.getId().getBranch() == null || bookCopy.getId().getBranch().getId() == null) {
             throw new ArgumentMissingException("Missing 'branch: {id}'");
         }
         if (bookCopy.getAmount() == null) {
             throw new ArgumentMissingException("Missing 'amount'");
         }
-        if (!this.bookDAO.existsById(bookCopy.getId().getBook().getId())) {
-            throw new IllegalRelationReferenceException("Book does not exist");
-        }
-        if (!this.libraryBranchDAO.existsById(bookCopy.getId().getBranch().getId())) {
-            throw new IllegalRelationReferenceException("Library branch does not exist");
+        if (!this.bookCopyDAO.existsById(bookCopy.getId())) {
+            throw new IllegalRelationReferenceException("Book copy does not exist");
         }
 
         return this.bookCopyDAO.save(bookCopy);
     }
 
     public LibraryBranch updateLibraryBranch(LibraryBranch branch) {
+        if (branch == null) {
+            throw new ArgumentMissingException("Missing library branch object");
+        }
         if (branch.getId() == null) {
             throw new ArgumentMissingException("Missing 'id'");
         }
@@ -142,10 +157,13 @@ public class LibrarianService {
     }
 
     public void removeBookCopy(BookCopyId bookCopyId) {
-        if (bookCopyId.getBook().getId() == null) {
+        if (bookCopyId == null) {
+            throw new ArgumentMissingException("Missing 'id'");
+        }
+        if (bookCopyId.getBook() == null || bookCopyId.getBook().getId() == null) {
             throw new ArgumentMissingException("Missing book 'id'");
         }
-        if (bookCopyId.getBranch().getId() == null) {
+        if (bookCopyId.getBranch() == null || bookCopyId.getBranch().getId() == null) {
             throw new ArgumentMissingException("Missing library branch  'id'");
         }
         if (!this.bookCopyDAO.existsById(bookCopyId)) {
