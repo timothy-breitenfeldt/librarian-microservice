@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.smoothstack.lms.librarianservice.dao.AuthorDAO;
 import com.smoothstack.lms.librarianservice.dao.BookCopyDAO;
 import com.smoothstack.lms.librarianservice.dao.BookDAO;
-import com.smoothstack.lms.librarianservice.dao.GenreDAO;
 import com.smoothstack.lms.librarianservice.dao.LibraryBranchDAO;
 import com.smoothstack.lms.librarianservice.entity.Book;
 import com.smoothstack.lms.librarianservice.entity.BookCopy;
@@ -26,12 +24,6 @@ public class LibrarianService {
 
     @Autowired
     private BookDAO bookDAO;
-
-    @Autowired
-    private AuthorDAO authorDAO;
-
-    @Autowired
-    private GenreDAO genreDAO;
 
     @Autowired
     private BookCopyDAO bookCopyDAO;
@@ -151,6 +143,9 @@ public class LibrarianService {
         }
         if (branch.getAddress() == null) {
             throw new ArgumentMissingException("Missing 'address'");
+        }
+        if (!this.libraryBranchDAO.existsById(branch.getId())) {
+            throw new IllegalRelationReferenceException("Library branch does not exist");
         }
 
         return this.libraryBranchDAO.save(branch);

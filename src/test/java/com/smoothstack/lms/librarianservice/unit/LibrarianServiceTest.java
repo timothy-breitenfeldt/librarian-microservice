@@ -1,4 +1,4 @@
-package com.smoothstack.lms.librarianservice.service;
+package com.smoothstack.lms.librarianservice.unit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,21 +13,20 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.smoothstack.lms.librarianservice.LibrarianEntityFactory;
 import com.smoothstack.lms.librarianservice.dao.AuthorDAO;
 import com.smoothstack.lms.librarianservice.dao.BookCopyDAO;
 import com.smoothstack.lms.librarianservice.dao.BookDAO;
 import com.smoothstack.lms.librarianservice.dao.GenreDAO;
 import com.smoothstack.lms.librarianservice.dao.LibraryBranchDAO;
-import com.smoothstack.lms.librarianservice.entity.Author;
 import com.smoothstack.lms.librarianservice.entity.Book;
 import com.smoothstack.lms.librarianservice.entity.BookCopy;
 import com.smoothstack.lms.librarianservice.entity.BookCopy.BookCopyId;
-import com.smoothstack.lms.librarianservice.entity.Genre;
 import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
-import com.smoothstack.lms.librarianservice.entity.Publisher;
 import com.smoothstack.lms.librarianservice.exception.ArgumentMissingException;
 import com.smoothstack.lms.librarianservice.exception.IllegalRelationReferenceException;
 import com.smoothstack.lms.librarianservice.exception.ResourceAlreadyExistsException;
+import com.smoothstack.lms.librarianservice.service.LibrarianService;
 
 @ExtendWith(MockitoExtension.class)
 public class LibrarianServiceTest {
@@ -55,7 +54,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookCopyDAO.save(bookCopy)).thenReturn(bookCopy);
         Mockito.when(this.bookDAO.existsById(bookCopy.getId().getBook().getId())).thenReturn(true);
         Mockito.when(this.libraryBranchDAO.existsById(bookCopy.getId().getBranch().getId())).thenReturn(true);
@@ -82,7 +81,7 @@ public class LibrarianServiceTest {
         Long bookId = null;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.createBookCopy(bookCopy);
@@ -94,7 +93,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = null;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.createBookCopy(bookCopy);
@@ -106,7 +105,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = null;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.createBookCopy(bookCopy);
@@ -118,7 +117,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookDAO.existsById(bookCopy.getId().getBook().getId())).thenReturn(false);
 
         Assertions.assertThrows(IllegalRelationReferenceException.class, () -> {
@@ -131,7 +130,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookDAO.existsById(bookCopy.getId().getBook().getId())).thenReturn(true);
         Mockito.when(this.libraryBranchDAO.existsById(bookCopy.getId().getBranch().getId())).thenReturn(false);
 
@@ -145,7 +144,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookDAO.existsById(bookCopy.getId().getBook().getId())).thenReturn(true);
         Mockito.when(this.libraryBranchDAO.existsById(bookCopy.getId().getBranch().getId())).thenReturn(true);
         Mockito.when(this.bookCopyDAO.existsById(bookCopy.getId())).thenReturn(true);
@@ -158,11 +157,11 @@ public class LibrarianServiceTest {
     @Test
     public void testNonZeroGetBooksNotInBookCopies() {
         Long branchId = 1l;
-        List<BookCopy> bookCopies = Arrays
-                .asList(new BookCopy[] { this.createBookCopy(1l, 1l, 1l), this.createBookCopy(2l, 2l, 2l) });
-        List<Book> books = Arrays
-                .asList(new Book[] { this.createBook(3l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
-                        this.createBook(4l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
+        List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
+                LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });
+        List<Book> books = Arrays.asList(
+                new Book[] { LibrarianEntityFactory.createBook(3l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
+                        LibrarianEntityFactory.createBook(4l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
 
         Mockito.when(this.libraryBranchDAO.existsById(branchId)).thenReturn(true);
         Mockito.when(this.bookCopyDAO.findBookCopiesById(branchId)).thenReturn(bookCopies);
@@ -176,11 +175,11 @@ public class LibrarianServiceTest {
     @Test
     public void testZeroGetBooksNotInBookCopies() {
         Long branchId = 1l;
-        List<BookCopy> bookCopies = Arrays
-                .asList(new BookCopy[] { this.createBookCopy(1l, 1l, 1l), this.createBookCopy(2l, 2l, 2l) });
-        List<Book> books = Arrays
-                .asList(new Book[] { this.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
-                        this.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
+        List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
+                LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });
+        List<Book> books = Arrays.asList(
+                new Book[] { LibrarianEntityFactory.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
+                        LibrarianEntityFactory.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
 
         Mockito.when(this.libraryBranchDAO.existsById(branchId)).thenReturn(true);
         Mockito.when(this.bookCopyDAO.findBookCopiesById(branchId)).thenReturn(bookCopies);
@@ -194,11 +193,11 @@ public class LibrarianServiceTest {
     @Test
     public void testInvalidBranchIdGetBooksNotInBookCopies() {
         Long branchId = 1l;
-        List<BookCopy> bookCopies = Arrays
-                .asList(new BookCopy[] { this.createBookCopy(1l, 1l, 1l), this.createBookCopy(2l, 2l, 2l) });
-        List<Book> books = Arrays
-                .asList(new Book[] { this.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
-                        this.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
+        List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
+                LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });
+        List<Book> books = Arrays.asList(
+                new Book[] { LibrarianEntityFactory.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
+                        LibrarianEntityFactory.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
 
         Mockito.when(this.libraryBranchDAO.existsById(branchId)).thenReturn(false);
 
@@ -210,11 +209,11 @@ public class LibrarianServiceTest {
     @Test
     public void testNullBranchIdGetBooksNotInBookCopies() {
         Long branchId = null;
-        List<BookCopy> bookCopies = Arrays
-                .asList(new BookCopy[] { this.createBookCopy(1l, 1l, 1l), this.createBookCopy(2l, 2l, 2l) });
-        List<Book> books = Arrays
-                .asList(new Book[] { this.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
-                        this.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
+        List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
+                LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });
+        List<Book> books = Arrays.asList(
+                new Book[] { LibrarianEntityFactory.createBook(1l, "test1", 1l, new Long[] { 1l }, new Long[] { 1l }),
+                        LibrarianEntityFactory.createBook(2l, "test2", 2l, new Long[] { 1l }, new Long[] { 1l }) });
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.getBooksNotInBookCopies(branchId);
@@ -224,8 +223,8 @@ public class LibrarianServiceTest {
     @Test
     public void testNonZeroSizeOfGetBranches() {
         List<LibraryBranch> branches = new ArrayList<>();
-        branches.add(createLibraryBranch(1l, "name_1", "address_1"));
-        branches.add(createLibraryBranch(2l, "name_2", "address_2"));
+        branches.add(LibrarianEntityFactory.createLibraryBranch(1l, "name_1", "address_1"));
+        branches.add(LibrarianEntityFactory.createLibraryBranch(2l, "name_2", "address_2"));
         Mockito.when(this.libraryBranchDAO.findAll()).thenReturn(branches);
         int expected = 2;
         int actual = this.librarianService.getLibraryBranches().size();
@@ -246,7 +245,7 @@ public class LibrarianServiceTest {
         Long branchId = 1l;
         Mockito.when(this.libraryBranchDAO.existsById(branchId)).thenReturn(true);
         Mockito.when(this.libraryBranchDAO.findById(branchId))
-                .thenReturn(Optional.of(this.createLibraryBranch(branchId, "test", "test")));
+                .thenReturn(Optional.of(LibrarianEntityFactory.createLibraryBranch(branchId, "test", "test")));
 
         Long expected = 1l;
         Long actual = this.librarianService.getLibraryBranchById(branchId).getId();
@@ -273,8 +272,8 @@ public class LibrarianServiceTest {
     @Test
     public void testSuccessfullGetBookCopies() {
         Long branchId = 1l;
-        List<BookCopy> bookCopies = Arrays
-                .asList(new BookCopy[] { this.createBookCopy(1l, 1l, 1l), this.createBookCopy(2l, 2l, 2l) });
+        List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
+                LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });
         Mockito.when(this.libraryBranchDAO.existsById(branchId)).thenReturn(true);
         Mockito.when(this.bookCopyDAO.findBookCopiesById(branchId)).thenReturn(bookCopies);
 
@@ -305,7 +304,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookCopyDAO.existsById(bookCopy.getId())).thenReturn(true);
         Mockito.when(this.bookCopyDAO.save(bookCopy)).thenReturn(bookCopy);
         BookCopy result = this.librarianService.updateBookCopy(bookCopy);
@@ -330,7 +329,7 @@ public class LibrarianServiceTest {
         Long bookId = null;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateBookCopy(bookCopy);
@@ -342,7 +341,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = null;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateBookCopy(bookCopy);
@@ -354,7 +353,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = null;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
 
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateBookCopy(bookCopy);
@@ -366,7 +365,7 @@ public class LibrarianServiceTest {
         Long bookId = 1l;
         Long branchId = 1l;
         Long amount = 1l;
-        BookCopy bookCopy = createBookCopy(bookId, branchId, amount);
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(bookId, branchId, amount);
         Mockito.when(this.bookCopyDAO.existsById(bookCopy.getId())).thenReturn(false);
 
         Assertions.assertThrows(IllegalRelationReferenceException.class, () -> {
@@ -379,7 +378,7 @@ public class LibrarianServiceTest {
         Long id = 1l;
         String name = "name";
         String address = "address";
-        LibraryBranch branch = this.createLibraryBranch(id, name, address);
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
         Mockito.when(this.libraryBranchDAO.save(branch)).thenReturn(branch);
         Long expected = 1l;
         Long actual = this.librarianService.updateLibraryBranch(branch).getId();
@@ -391,7 +390,7 @@ public class LibrarianServiceTest {
         Long id = null;
         String name = "name";
         String address = "address";
-        LibraryBranch branch = this.createLibraryBranch(id, name, address);
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateLibraryBranch(branch);
         });
@@ -402,7 +401,7 @@ public class LibrarianServiceTest {
         Long id = 1l;
         String name = null;
         String address = "address";
-        LibraryBranch branch = this.createLibraryBranch(id, name, address);
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateLibraryBranch(branch);
         });
@@ -413,7 +412,7 @@ public class LibrarianServiceTest {
         Long id = 1l;
         String name = "name";
         String address = null;
-        LibraryBranch branch = this.createLibraryBranch(id, name, address);
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.updateLibraryBranch(branch);
         });
@@ -423,7 +422,7 @@ public class LibrarianServiceTest {
     public void testSuccessfullRemoveBookCopy() {
         Long bookId = 1l;
         Long branchId = 1l;
-        BookCopyId bookCopyId = this.createBookCopyId(bookId, branchId);
+        BookCopyId bookCopyId = LibrarianEntityFactory.createBookCopyId(bookId, branchId);
         Mockito.when(this.bookCopyDAO.existsById(bookCopyId)).thenReturn(true);
         Mockito.doNothing().when(this.bookCopyDAO).deleteById(bookCopyId);
         Assertions.assertDoesNotThrow(() -> {
@@ -443,7 +442,7 @@ public class LibrarianServiceTest {
     public void testNullBookIdRemoveBookCopy() {
         Long bookId = null;
         Long branchId = 1l;
-        BookCopyId bookCopyId = this.createBookCopyId(bookId, branchId);
+        BookCopyId bookCopyId = LibrarianEntityFactory.createBookCopyId(bookId, branchId);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.removeBookCopy(bookCopyId);
         });
@@ -453,7 +452,7 @@ public class LibrarianServiceTest {
     public void testNullBranchIdRemoveBookCopy() {
         Long bookId = 1l;
         Long branchId = null;
-        BookCopyId bookCopyId = this.createBookCopyId(bookId, branchId);
+        BookCopyId bookCopyId = LibrarianEntityFactory.createBookCopyId(bookId, branchId);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
             this.librarianService.removeBookCopy(bookCopyId);
         });
@@ -463,60 +462,11 @@ public class LibrarianServiceTest {
     public void testInvalidBookCopyIdRemoveBookCopy() {
         Long bookId = 1l;
         Long branchId = 1l;
-        BookCopyId bookCopyId = this.createBookCopyId(bookId, branchId);
+        BookCopyId bookCopyId = LibrarianEntityFactory.createBookCopyId(bookId, branchId);
         Mockito.when(this.bookCopyDAO.existsById(bookCopyId)).thenReturn(false);
         Assertions.assertThrows(IllegalRelationReferenceException.class, () -> {
             this.librarianService.removeBookCopy(bookCopyId);
         });
-    }
-
-    private LibraryBranch createLibraryBranch(Long id, String name, String address) {
-        LibraryBranch branch = new LibraryBranch();
-        branch.setId(id);
-        branch.setName(name);
-        branch.setAddress(address);
-        return branch;
-    }
-
-    private BookCopy createBookCopy(Long bookId, Long branchId, Long amount) {
-        BookCopy bookCopy = new BookCopy();
-        BookCopyId bookCopyId = this.createBookCopyId(bookId, branchId);
-        bookCopy.setId(bookCopyId);
-        bookCopy.setAmount(amount);
-        return bookCopy;
-    }
-
-    private BookCopyId createBookCopyId(Long bookId, Long branchId) {
-        BookCopyId bookCopyId = new BookCopyId();
-        Book book = new Book();
-        LibraryBranch branch = new LibraryBranch();
-        book.setId(bookId);
-        branch.setId(branchId);
-        bookCopyId.setBook(book);
-        bookCopyId.setBranch(branch);
-        return bookCopyId;
-    }
-
-    private Book createBook(Long id, String title, Long publisherId, Long[] authorIds, Long[] genreIds) {
-        Book book = new Book();
-        Publisher publisher = new Publisher();
-
-        publisher.setId(publisherId);
-        book.setTitle(title);
-        book.setPublisher(publisher);
-        book.setId(id);
-        for (Long authorId : authorIds) {
-            Author author = new Author();
-            author.setId(authorId);
-            book.addAuthor(author);
-        }
-        for (Long genreId : genreIds) {
-            Genre genre = new Genre();
-            genre.setId(genreId);
-            book.addGenre(genre);
-        }
-
-        return book;
     }
 
 }

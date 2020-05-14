@@ -83,7 +83,7 @@ public class LibrarianController {
 
     @PutMapping("/branches/{branchId}")
     public ResponseEntity<LibraryBranch> updateLibraryBranch(@PathVariable @Min(1) Long branchId,
-            @RequestBody @Valid LibraryBranch branch) {
+            @RequestBody LibraryBranch branch) {
         branch.setId(branchId);
         logger.debug("request: {}", branch.toString());
         LibraryBranch response = this.librarianService.updateLibraryBranch(branch);

@@ -1,4 +1,16 @@
-CREATE TABLE IF NOT EXISTS borrower (
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS book_copy;
+DROP TABLE IF EXISTS book_loan;
+DROP TABLE IF EXISTS book_genres;
+DROP TABLE IF EXISTS book_authors;
+DROP TABLE IF EXISTS book;
+DROP TABLE IF EXISTS genre;
+DROP TABLE IF EXISTS publisher;
+DROP TABLE IF EXISTS author;
+DROP TABLE IF EXISTS library_branch;
+DROP TABLE IF EXISTS borrower;
+
+CREATE TABLE borrower (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   address varchar(255) DEFAULT NULL,
   name varchar(255) DEFAULT NULL,
@@ -6,20 +18,20 @@ CREATE TABLE IF NOT EXISTS borrower (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS library_branch (
+CREATE TABLE library_branch (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   address varchar(255) DEFAULT NULL,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS author (
+CREATE TABLE author (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS publisher (
+CREATE TABLE publisher (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   address varchar(255) DEFAULT NULL,
   name varchar(255) DEFAULT NULL,
@@ -27,13 +39,13 @@ CREATE TABLE IF NOT EXISTS publisher (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS genre (
+CREATE TABLE genre (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   name varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS book (
+CREATE TABLE book (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   title varchar(255) DEFAULT NULL,
   publisher_id bigint(20) NOT NULL,
@@ -41,7 +53,7 @@ CREATE TABLE IF NOT EXISTS book (
   FOREIGN KEY (publisher_id) REFERENCES publisher (id)
 );
 
-CREATE TABLE IF NOT EXISTS book_authors (
+CREATE TABLE book_authors (
   book_id bigint(20) NOT NULL,
   author_id bigint(20) NOT NULL,
   PRIMARY KEY (book_id,author_id),
@@ -49,7 +61,7 @@ CREATE TABLE IF NOT EXISTS book_authors (
   FOREIGN KEY (book_id) REFERENCES book (id)
 );
 
-CREATE TABLE IF NOT EXISTS book_genres (
+CREATE TABLE book_genres (
   book_id bigint(20) NOT NULL,
   genre_id bigint(20) NOT NULL,
   PRIMARY KEY (book_id,genre_id),
@@ -57,7 +69,7 @@ CREATE TABLE IF NOT EXISTS book_genres (
   FOREIGN KEY (genre_id) REFERENCES genre (id)
 );
 
-CREATE TABLE IF NOT EXISTS book_loan (
+CREATE TABLE book_loan (
   book_id bigint(20) NOT NULL,
   borrower_id bigint(20) NOT NULL,
   branch_id bigint(20) NOT NULL,
@@ -70,7 +82,7 @@ CREATE TABLE IF NOT EXISTS book_loan (
   FOREIGN KEY (branch_id) REFERENCES library_branch (id)
 );
 
-CREATE TABLE IF NOT EXISTS book_copy (
+CREATE TABLE book_copy (
   book_id bigint(20) NOT NULL,
   branch_id bigint(20) NOT NULL,
   amount bigint(20) DEFAULT NULL,
@@ -79,7 +91,7 @@ CREATE TABLE IF NOT EXISTS book_copy (
   FOREIGN KEY (book_id) REFERENCES book (id)
 );
 
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE user (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   password varchar(255) DEFAULT NULL,
   role varchar(255) DEFAULT NULL,
