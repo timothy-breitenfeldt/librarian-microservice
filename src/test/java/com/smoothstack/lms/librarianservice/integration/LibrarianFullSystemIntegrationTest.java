@@ -156,6 +156,32 @@ public class LibrarianFullSystemIntegrationTest {
     }
 
     @Test
+    public void testEmptyResultGetBooksNotInBookCopies() throws Exception {
+        Long branchId = 3l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/books/book-copies/branches/{branchId}", branchId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.*").isEmpty());
+    }
+
+    @Test
+    public void testZeroBranchIdGetBooksNotInBookCopies() throws Exception {
+        Long branchId = 0l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/books/book-copies/branches/{branchId}", branchId))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testNegativeBranchIdGetBooksNotInBookCopies() throws Exception {
+        Long branchId = -1l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/books/book-copies/branches/{branchId}", branchId))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void testSuccessfullGetLibraryBranches() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/lms/librarian/branches").accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())

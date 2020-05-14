@@ -173,7 +173,7 @@ public class LibrarianUnitTest {
     }
 
     @Test
-    public void testZeroGetBooksNotInBookCopies() {
+    public void testEmptyResultGetBooksNotInBookCopies() {
         Long branchId = 1l;
         List<BookCopy> bookCopies = Arrays.asList(new BookCopy[] { LibrarianEntityFactory.createBookCopy(1l, 1l, 1l),
                 LibrarianEntityFactory.createBookCopy(2l, 2l, 2l) });

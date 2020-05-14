@@ -3,6 +3,7 @@ INSERT INTO borrower (id, address, name, phone_number) VALUES (2, '1827 Tod Rd. 
 
 INSERT INTO library_branch (id, address, name) VALUES (1, '1837 5th Ave. Seattle, Wa', 'Seattle Library');
 INSERT INTO library_branch (id, address, name) VALUES (2, '17637 Fairlakes Parkway Fairfax, Virginia', 'Chantilly Regional Library');
+INSERT INTO library_branch (id, address, name) VALUES (3, '17273 Arlington Ave. Washington DC', 'DC Public Library');
 
 INSERT INTO genre (id, name) VALUES (1, 'Fiction');
 INSERT INTO genre (id, name) VALUES (2, 'Suspense Fiction');
@@ -49,6 +50,13 @@ INSERT INTO book_copy (book_id, branch_id, amount) VALUES (7, 1, 0);
 INSERT INTO book_copy (book_id, branch_id, amount) VALUES (8, 1, 1);
 INSERT INTO book_copy (book_id, branch_id, amount) VALUES (10, 1, 9);
 INSERT INTO book_copy (book_id, branch_id, amount) VALUES (10, 2, 7);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (1, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (2, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (3, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (7, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (8, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (9, 3, 1);
+INSERT INTO book_copy (book_id, branch_id, amount) VALUES (10, 3, 1);
 
 INSERT INTO book_loan (book_id, borrower_id, branch_id, date_in, date_out, due_date) VALUES (1, 1, 2, NULL, '2020-04-20', '2020-04-27');
 INSERT INTO book_loan (book_id, borrower_id, branch_id, date_in, date_out, due_date) VALUES (2, 2, 1, NULL, '2020-04-19', '2020-04-26');
