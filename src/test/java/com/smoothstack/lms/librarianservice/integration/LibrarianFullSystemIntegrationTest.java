@@ -199,6 +199,24 @@ public class LibrarianFullSystemIntegrationTest {
     }
 
     @Test
+    public void testZeroBranchIdGetLibraryBranchById() throws Exception {
+        Long branchId = 0l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/branches/{branchId}", branchId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testNegativeBranchIdGetLibraryBranchById() throws Exception {
+        Long branchId = -1l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/branches/{branchId}", branchId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void testSuccessfullGetBookCopies() throws Exception {
         Long branchId = 1l;
         this.mockMvc
@@ -206,6 +224,24 @@ public class LibrarianFullSystemIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.*").isNotEmpty());
+    }
+
+    @Test
+    public void testZeroBranchIdGetBookCopies() throws Exception {
+        Long branchId = 0l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/book-copies/branches/{branchId}", branchId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testNegativeBranchIdGetBookCopies() throws Exception {
+        Long branchId = -1l;
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.get("/lms/librarian/book-copies/branches/{branchId}", branchId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
