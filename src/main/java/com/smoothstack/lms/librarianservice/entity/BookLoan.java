@@ -117,6 +117,16 @@ public class BookLoan {
     @JsonFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateIn;
 
+    public BookLoan() {
+    }
+
+    public BookLoan(BookLoanId id, LocalDate dateOut, LocalDate dueDate, LocalDate dateIn) {
+        this.id = id;
+        this.dateOut = dateOut;
+        this.dueDate = dueDate;
+        this.dateIn = dateIn;
+    }
+
     public BookLoanId getId() {
         return this.id;
     }

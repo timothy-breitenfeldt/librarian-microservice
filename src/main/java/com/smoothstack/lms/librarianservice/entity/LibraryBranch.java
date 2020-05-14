@@ -1,15 +1,10 @@
 package com.smoothstack.lms.librarianservice.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -28,14 +23,18 @@ public class LibraryBranch {
     private String name;
 
     @Column
-    @Size(min = 10, max = 100)
+    @Size(min = 1, max = 100)
     private String address;
 
-    @OneToMany(mappedBy = "id.branch", cascade = CascadeType.ALL)
-    private Set<BookCopy> bookCopies = new HashSet<>();
+    public LibraryBranch() {
+    }
 
-    @OneToMany(mappedBy = "id.branch", cascade = CascadeType.ALL)
-    private Set<BookLoan> bookLoans = new HashSet<>();
+    public LibraryBranch(@Min(1) Long id, @Size(min = 2, max = 100) String name,
+            @Size(min = 1, max = 100) String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
 
     public Long getId() {
         return this.id;

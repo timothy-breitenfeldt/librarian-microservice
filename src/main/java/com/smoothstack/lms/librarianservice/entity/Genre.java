@@ -30,6 +30,14 @@ public class Genre {
     @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 
+    public Genre() {
+    }
+
+    public Genre(@Min(1) Long id, @Size(min = 2, max = 50) String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return this.id;
     }

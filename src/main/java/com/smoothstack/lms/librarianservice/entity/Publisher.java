@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -29,15 +28,25 @@ public class Publisher {
     private String name;
 
     @Column
-    @Size(min = 10, max = 100)
+    @Size(min = 2, max = 100)
     private String address;
 
     @Column
-    @Pattern(regexp = "(^$|[0-9]{10})")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();
+
+    public Publisher() {
+    }
+
+    public Publisher(@Min(1) Long id, @Size(min = 2, max = 100) String name, @Size(min = 2, max = 100) String address,
+            String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 
     public Long getId() {
         return this.id;

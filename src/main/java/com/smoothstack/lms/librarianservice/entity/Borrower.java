@@ -1,18 +1,12 @@
 package com.smoothstack.lms.librarianservice.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -33,11 +27,19 @@ public class Borrower {
     private String address;
 
     @Column
-    @Pattern(regexp = "(^$|[0-9]{10})")
+//    @Pattern(regexp = "(^$|[0-9]{10})")
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "id.borrower", cascade = CascadeType.ALL)
-    private Set<BookLoan> bookLoans = new HashSet<>();
+    public Borrower() {
+    }
+
+    public Borrower(@Min(1) Long id, @Size(min = 2, max = 50) String name, @Size(min = 10, max = 100) String address,
+            String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 
     public Long getId() {
         return this.id;

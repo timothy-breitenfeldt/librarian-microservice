@@ -43,6 +43,18 @@ public class Book {
             @JoinColumn(name = "genre_id") })
     private Set<Genre> genres = new HashSet<>();
 
+    public Book() {
+    }
+
+    public Book(@Min(1) Long id, @Size(min = 2, max = 100) String title, Publisher publisher, Set<Author> authors,
+            Set<Genre> genres) {
+        this.id = id;
+        this.title = title;
+        this.publisher = publisher;
+        this.authors = authors;
+        this.genres = genres;
+    }
+
     public Long getId() {
         return this.id;
     }
