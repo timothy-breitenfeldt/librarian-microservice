@@ -29,7 +29,7 @@ import com.smoothstack.lms.librarianservice.exception.ResourceAlreadyExistsExcep
 import com.smoothstack.lms.librarianservice.service.LibrarianService;
 
 @ExtendWith(MockitoExtension.class)
-public class LibrarianServiceTest {
+public class LibrarianUnitTest {
 
     @Mock
     private BookDAO bookDAO;
@@ -379,6 +379,7 @@ public class LibrarianServiceTest {
         String name = "name";
         String address = "address";
         LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
+        Mockito.when(this.libraryBranchDAO.existsById(branch.getId())).thenReturn(true);
         Mockito.when(this.libraryBranchDAO.save(branch)).thenReturn(branch);
         Long expected = 1l;
         Long actual = this.librarianService.updateLibraryBranch(branch).getId();
@@ -414,6 +415,18 @@ public class LibrarianServiceTest {
         String address = null;
         LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
         Assertions.assertThrows(ArgumentMissingException.class, () -> {
+            this.librarianService.updateLibraryBranch(branch);
+        });
+    }
+
+    @Test
+    public void testInvalidBranchIdUpdateLibraryBranch() {
+        Long id = 1l;
+        String name = "name";
+        String address = "address";
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(id, name, address);
+        Mockito.when(this.libraryBranchDAO.existsById(branch.getId())).thenReturn(false);
+        Assertions.assertThrows(IllegalRelationReferenceException.class, () -> {
             this.librarianService.updateLibraryBranch(branch);
         });
     }

@@ -20,7 +20,7 @@ import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql({ "../sql/schema.sql", "../sql/data.sql" })
-public class LibrarianControllerTest {
+public class LibrarianFullSystemIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
