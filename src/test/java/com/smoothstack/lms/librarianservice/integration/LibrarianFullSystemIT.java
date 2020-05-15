@@ -21,7 +21,7 @@ import com.smoothstack.lms.librarianservice.entity.LibraryBranch;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql({ "classpath:schema.sql", "classpath:data.sql" })
-public class LibrarianFullSystemIntegrationTest {
+public class LibrarianFullSystemIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -262,6 +262,66 @@ public class LibrarianFullSystemIntegrationTest {
     }
 
     @Test
+    public void testNullAmountUpdateBookCopy() throws JsonProcessingException, Exception {
+        Long bookId = 7l;
+        Long branchId = 2l;
+        Long amount = null;
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(null, null, amount);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/lms/librarian/book-copies/books/{bookId}/branches/{branchId}", bookId, branchId)
+                        .content(this.objectMapper.writeValueAsString(bookCopy)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void testInvalidBookIdUpdateBookCopy() throws JsonProcessingException, Exception {
+        Long bookId = 100l;
+        Long branchId = 2l;
+        Long amount = 1l;
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(null, null, amount);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/lms/librarian/book-copies/books/{bookId}/branches/{branchId}", bookId, branchId)
+                        .content(this.objectMapper.writeValueAsString(bookCopy)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testInvalidBranchIdUpdateBookCopy() throws JsonProcessingException, Exception {
+        Long bookId = 7l;
+        Long branchId = 100l;
+        Long amount = 1l;
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(null, null, amount);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/lms/librarian/book-copies/books/{bookId}/branches/{branchId}", bookId, branchId)
+                        .content(this.objectMapper.writeValueAsString(bookCopy)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testInvalidBookCopyIdUpdateBookCopy() throws JsonProcessingException, Exception {
+        Long bookId = 2l;
+        Long branchId = 1l;
+        Long amount = 1l;
+        BookCopy bookCopy = LibrarianEntityFactory.createBookCopy(null, null, amount);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .put("/lms/librarian/book-copies/books/{bookId}/branches/{branchId}", bookId, branchId)
+                        .content(this.objectMapper.writeValueAsString(bookCopy)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void testSuccessfullUpdateLibraryBranch() throws JsonProcessingException, Exception {
         Long branchId = 1l;
         String name = "name";
@@ -277,6 +337,48 @@ public class LibrarianFullSystemIntegrationTest {
     }
 
     @Test
+    public void testNullNameUpdateLibraryBranch() throws JsonProcessingException, Exception {
+        Long branchId = 1l;
+        String name = null;
+        String address = "address";
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(null, name, address);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.put("/lms/librarian/branches/{branchId}", branchId)
+                        .content(this.objectMapper.writeValueAsString(branch)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void testNullAddressUpdateLibraryBranch() throws JsonProcessingException, Exception {
+        Long branchId = 1l;
+        String name = "name";
+        String address = null;
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(null, name, address);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.put("/lms/librarian/branches/{branchId}", branchId)
+                        .content(this.objectMapper.writeValueAsString(branch)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void testInvalidBranchIdUpdateLibraryBranch() throws JsonProcessingException, Exception {
+        Long branchId = 100l;
+        String name = "name";
+        String address = "address";
+        LibraryBranch branch = LibrarianEntityFactory.createLibraryBranch(null, name, address);
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.put("/lms/librarian/branches/{branchId}", branchId)
+                        .content(this.objectMapper.writeValueAsString(branch)).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     public void testSuccessfullRemoveBookCopy() throws Exception {
         Long bookId = 1l;
         Long branchId = 1l;
@@ -285,6 +387,17 @@ public class LibrarianFullSystemIntegrationTest {
                 .perform(MockMvcRequestBuilders.delete("/lms/librarian//book-copies/books/{bookId}/branches/{branchId}",
                         bookId, branchId))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    public void testInvalidBookCopyIdRemoveBookCopy() throws Exception {
+        Long bookId = 2l;
+        Long branchId = 1l;
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.delete("/lms/librarian//book-copies/books/{bookId}/branches/{branchId}",
+                        bookId, branchId))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }
